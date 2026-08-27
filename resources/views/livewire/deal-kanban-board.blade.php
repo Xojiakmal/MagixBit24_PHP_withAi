@@ -3,13 +3,13 @@
         <!-- Header -->
         <div class="flex justify-between items-center mb-8">
             <div>
-                <h2 class="text-3xl font-bold text-white tracking-tight">Bitimlar Voronkasi</h2>
-                <p class="text-dark-muted mt-1 text-sm">Savdo jarayonini interaktiv Kanban orqali kuzating</p>
+                <h2 class="text-3xl font-bold text-white tracking-tight">{{ __('Bitimlar Voronkasi') }}</h2>
+                <p class="text-dark-muted mt-1 text-sm">{{ __('Savdo jarayonini interaktiv Kanban orqali kuzating') }}</p>
             </div>
             @can('create_deal')
             <button wire:click="openCreateModal" class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-xl text-white bg-accent hover:bg-accent-hover focus:outline-none transition-all duration-300 shadow-[0_0_20px_rgba(155,114,255,0.4)]">
                 <svg class="-ml-1 mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
-                Yangi Bitim
+                {{ __('Yangi Bitim') }}
             </button>
             @endcan
         </div>
@@ -18,15 +18,15 @@
         <div class="mb-6 flex items-center space-x-1 bg-white/5 p-1 rounded-xl w-fit border border-dark-border">
             <button wire:click="setView('kanban')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'kanban' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
                 <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                Kanban
+                {{ __('Kanban') }}
             </button>
             <button wire:click="setView('list')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'list' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
                 <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                Ro'yxat (List)
+                {{ __('Ro\'yxat') }} (List)
             </button>
             <button wire:click="setView('activities')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'activities' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
                 <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                Faoliyatlar (Activities)
+                {{ __('Faoliyatlar') }} (Activities)
             </button>
         </div>
         
@@ -92,14 +92,14 @@
                                 </div>
                                 <a href="{{ route('projects.tasks', ['dealId' => $deal->id]) }}" class="text-accent hover:text-accent-hover text-xs font-semibold flex items-center">
                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                                    Vazifalar
+                                    {{ __('Vazifalar') }}
                                 </a>
                             </div>
                         @else
                             <div class="text-xs text-dark-muted mt-4 pt-4 border-t border-dark-border/50 flex justify-end">
                                 <a href="{{ route('projects.tasks', ['dealId' => $deal->id]) }}" class="text-accent hover:text-accent-hover text-xs font-semibold flex items-center">
                                     <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                                    Vazifalar
+                                    {{ __('Vazifalar') }}
                                 </a>
                             </div>
                         @endif
@@ -162,7 +162,7 @@
                         @empty
                             <tr>
                                 <td colspan="7" class="px-6 py-8 text-center text-gray-500">
-                                    Hech qanday bitim topilmadi.
+                                    {{ __('Hech qanday bitim topilmadi.') }}
                                 </td>
                             </tr>
                         @endforelse
@@ -221,7 +221,7 @@
                             <span class="text-gray-500">{{ $deal->stage->name ?? 'Bosqichsiz' }}</span>
                             <a href="{{ route('projects.tasks', ['dealId' => $deal->id]) }}" class="text-gray-400 hover:text-white flex items-center">
                                 <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
-                                Vazifalar
+                                {{ __('Vazifalar') }}
                             </a>
                         </div>
                     </div>
@@ -233,10 +233,10 @@
         @endif
 
         <!-- Create Deal Slide-Over -->
-        <x-slide-over wire:model="isCreatingDeal" id="createDealPanel" title="Yangi bitim (Deal) qo'shish" maxWidth="6xl">
+        <x-slide-over wire:model="isCreatingDeal" id="createDealPanel" title="{{ __('Yangi bitim (Deal) qo\'shish') }}" maxWidth="6xl">
             <x-slot:actions>
                 <button wire:click="saveDeal" class="px-5 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-lg transition-colors shadow-[0_0_15px_rgba(155,114,255,0.4)]">
-                    Saqlash
+                    {{ __('Saqlash') }}
                 </button>
             </x-slot:actions>
 
@@ -247,13 +247,13 @@
                     
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">Bitim nomi</label>
-                            <input type="text" wire:model="newDealTitle" placeholder="Masalan: Web sayt yaratish xizmati" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all text-lg font-medium">
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Bitim nomi') }}</label>
+                            <input type="text" wire:model="newDealTitle" placeholder="{{ __('Masalan: Web sayt yaratish xizmati') }}" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all text-lg font-medium">
                             @error('newDealTitle') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">Summasi va Valyuta (Amount and currency)</label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Summasi va Valyuta (Amount and currency)') }}</label>
                             <div class="flex space-x-2 relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
                                 <input type="tel" wire:model="newDealAmount" placeholder="0.00" class="w-full bg-white/5 border border-dark-border rounded-xl pl-8 pr-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all text-lg font-medium">
@@ -263,13 +263,13 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 bg-white/5 rounded-2xl border border-white/5">
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">Mijoz (Client) *</label>
-                            <input type="text" wire:model="newDealClientName" placeholder="Mijoz ismi" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all">
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Mijoz (Client)') }} *</label>
+                            <input type="text" wire:model="newDealClientName" placeholder="{{ __('Mijoz ismi') }}" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all">
                             @error('newDealClientName') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">Telefon raqam (Phone) *</label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Telefon raqam (Phone)') }} *</label>
                             <input type="tel" wire:model="newDealClientPhone" oninput="this.value = this.value.replace(/[^0-9\+\s]/g, '')" placeholder="+998 90 123 45 67" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all">
                             @error('newDealClientPhone') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
@@ -277,23 +277,23 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 bg-white/5 rounded-2xl border border-white/5">
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">Boshlanish vaqti</label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Boshlanish vaqti') }}</label>
                             <input type="datetime-local" wire:model="newDealStartDate" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all text-sm">
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">Tugash vaqti</label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Tugash vaqti') }}</label>
                             <input type="datetime-local" wire:model="newDealEndDate" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all text-sm">
                         </div>
                     </div>
 
                     <div class="p-5 bg-white/5 rounded-2xl border border-white/5 space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">Mas'ullar (Xodimlar, Rollar, Jamoalar)</label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Mas\'ullar (Xodimlar, Rollar, Jamoalar)') }}</label>
                             
                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                 <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
-                                    <h5 class="text-xs font-bold text-gray-400 mb-2">Xodimlar</h5>
+                                    <h5 class="text-xs font-bold text-gray-400 mb-2">{{ __('Xodimlar') }}</h5>
                                     @foreach($this->allUsers as $u)
                                         <label class="flex items-center space-x-3 text-sm text-gray-300 hover:text-white cursor-pointer py-1.5 px-2 hover:bg-white/5 rounded-lg transition-colors group">
                                             <input type="checkbox" wire:model="newDealAssignedUsers" value="{{ $u->id }}" class="rounded bg-black/50 border-white/20 text-accent focus:ring-accent focus:ring-offset-0 focus:ring-2 focus:border-accent w-4 h-4 transition-all cursor-pointer">
@@ -302,7 +302,7 @@
                                     @endforeach
                                 </div>
                                 <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
-                                    <h5 class="text-xs font-bold text-gray-400 mb-2">Rollar</h5>
+                                    <h5 class="text-xs font-bold text-gray-400 mb-2">{{ __('Rollar') }}</h5>
                                     @foreach(\App\Models\Role::whereNotIn('name', ['Admin'])->get() as $r)
                                         <label class="flex items-center space-x-3 text-sm text-gray-300 hover:text-white cursor-pointer py-1.5 px-2 hover:bg-white/5 rounded-lg transition-colors group">
                                             <input type="checkbox" wire:model="newDealAssignedRoles" value="{{ $r->id }}" class="rounded bg-black/50 border-white/20 text-accent focus:ring-accent focus:ring-offset-0 focus:ring-2 focus:border-accent w-4 h-4 transition-all cursor-pointer">
@@ -311,7 +311,7 @@
                                     @endforeach
                                 </div>
                                 <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
-                                    <h5 class="text-xs font-bold text-gray-400 mb-2">Jamoalar</h5>
+                                    <h5 class="text-xs font-bold text-gray-400 mb-2">{{ __('Jamoalar') }}</h5>
                                     @foreach(\App\Models\Team::all() as $t)
                                         <label class="flex items-center space-x-3 text-sm text-gray-300 hover:text-white cursor-pointer py-1.5 px-2 hover:bg-white/5 rounded-lg transition-colors group">
                                             <input type="checkbox" wire:model="newDealAssignedTeams" value="{{ $t->id }}" class="rounded bg-black/50 border-white/20 text-accent focus:ring-accent focus:ring-offset-0 focus:ring-2 focus:border-accent w-4 h-4 transition-all cursor-pointer">
@@ -322,52 +322,52 @@
                             </div>
                         </div>
                         
-                        <h4 class="text-white font-semibold mt-4">Qo'shimcha parametrlar</h4>
+                        <h4 class="text-white font-semibold mt-4">{{ __('Qo\'shimcha parametrlar') }}</h4>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Custom Select for Deal Type -->
                             <div x-data="{ open: false, selected: @entangle('newDealType').defer }" class="relative">
-                                <label class="block text-sm font-medium text-white/60 mb-2">Bitim turi (Deal Type)</label>
+                                <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Bitim turi') }} (Deal Type)</label>
                                 <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
-                                    <span x-text="selected === 'regular' ? 'Oddiy savdo' : (selected === 'service' ? 'Xizmat ko\'rsatish' : (selected === 'complex' ? 'Kompleks sotuv' : (selected === 'delivery' ? 'Yetkazib berish' : 'Tanlang')))"></span>
+                                    <span x-text="selected === 'regular' ? '{{ __('Oddiy savdo') }}' : (selected === 'service' ? '{{ __('Xizmat ko\'rsatish') }}' : (selected === 'complex' ? '{{ __('Kompleks sotuv') }}' : (selected === 'delivery' ? '{{ __('Yetkazib berish') }}' : '{{ __('Tanlang') }}')))"></span>
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
                                 <div x-show="open" x-transition class="absolute z-50 w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden" style="display: none;">
-                                    <div @click="selected = 'regular'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Oddiy savdo</div>
-                                    <div @click="selected = 'service'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Xizmat ko'rsatish</div>
-                                    <div @click="selected = 'complex'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Kompleks sotuv</div>
-                                    <div @click="selected = 'delivery'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Yetkazib berish</div>
+                                    <div @click="selected = 'regular'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Oddiy savdo') }}</div>
+                                    <div @click="selected = 'service'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Xizmat ko\'rsatish') }}</div>
+                                    <div @click="selected = 'complex'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Kompleks sotuv') }}</div>
+                                    <div @click="selected = 'delivery'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Yetkazib berish') }}</div>
                                 </div>
                             </div>
                             
                             <!-- Custom Select for Source -->
                             <div x-data="{ open: false, selected: @entangle('newDealSource').defer }" class="relative">
-                                <label class="block text-sm font-medium text-white/60 mb-2">Manba (Source)</label>
+                                <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Manba') }} (Source)</label>
                                 <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
                                     <span x-text="
                                         selected === 'telegram' ? 'Telegram' : 
-                                        (selected === 'call' ? 'Qo\'ng\'iroq' : 
+                                        (selected === 'call' ? '{{ __('Qo\'ng\'iroq') }}' : 
                                         (selected === 'email' ? 'Email' : 
-                                        (selected === 'website' ? 'Veb-sayt' : 
-                                        (selected === 'admin' ? 'Admin (Kompaniya egasi)' : 
-                                        (selected === 'other' ? 'Boshqa' : 'Tanlang')))))
+                                        (selected === 'website' ? '{{ __('Veb-sayt') }}' : 
+                                        (selected === 'admin' ? '{{ __('Admin (Kompaniya egasi)') }}' : 
+                                        (selected === 'other' ? '{{ __('Boshqa') }}' : '{{ __('Tanlang') }}')))))
                                     "></span>
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
                                 <div x-show="open" x-transition class="absolute z-50 w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
                                     <div @click="selected = 'telegram'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Telegram</div>
-                                    <div @click="selected = 'call'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Qo'ng'iroq</div>
+                                    <div @click="selected = 'call'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Qo\'ng\'iroq') }}</div>
                                     <div @click="selected = 'email'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Email</div>
-                                    <div @click="selected = 'website'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Veb-sayt</div>
-                                    <div @click="selected = 'admin'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Admin (Kompaniya egasi)</div>
-                                    <div @click="selected = 'other'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Boshqa</div>
+                                    <div @click="selected = 'website'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Veb-sayt') }}</div>
+                                    <div @click="selected = 'admin'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Admin (Kompaniya egasi)') }}</div>
+                                    <div @click="selected = 'other'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Boshqa') }}</div>
                                 </div>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">Tafsilotlar (Description)</label>
-                            <textarea wire:model="newDealDescription" rows="4" placeholder="Bitim tafsilotlari..." class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all custom-scrollbar"></textarea>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Tafsilotlar (Description)') }}</label>
+                            <textarea wire:model="newDealDescription" rows="4" placeholder="{{ __('Bitim tafsilotlari...') }}" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all custom-scrollbar"></textarea>
                         </div>
                         
                     </div>
@@ -375,48 +375,48 @@
 
                 <!-- Right Pane: Products -->
                 <div class="w-full lg:w-1/3 p-6 bg-black/20 space-y-6">
-                    <h3 class="text-lg font-semibold text-white border-b border-white/10 pb-3">Mahsulotlar (Products)</h3>
+                    <h3 class="text-lg font-semibold text-white border-b border-white/10 pb-3">{{ __('Mahsulotlar') }} (Products)</h3>
                     
                     <div class="flex space-x-2 border-b border-dark-border mb-4">
-                        <button wire:click="$set('productTab', 'select')" class="pb-2 text-sm font-medium transition-colors border-b-2 {{ $productTab === 'select' ? 'text-accent border-accent' : 'text-gray-500 border-transparent hover:text-gray-300' }}">Tanlash</button>
-                        <button wire:click="$set('productTab', 'create')" class="pb-2 text-sm font-medium transition-colors border-b-2 {{ $productTab === 'create' ? 'text-accent border-accent' : 'text-gray-500 border-transparent hover:text-gray-300' }}">Yangi qo'shish</button>
+                        <button wire:click="$set('productTab', 'select')" class="pb-2 text-sm font-medium transition-colors border-b-2 {{ $productTab === 'select' ? 'text-accent border-accent' : 'text-gray-500 border-transparent hover:text-gray-300' }}">{{ __('Tanlash') }}</button>
+                        <button wire:click="$set('productTab', 'create')" class="pb-2 text-sm font-medium transition-colors border-b-2 {{ $productTab === 'create' ? 'text-accent border-accent' : 'text-gray-500 border-transparent hover:text-gray-300' }}">{{ __('Yangi qo\'shish') }}</button>
                     </div>
 
                     @if($productTab === 'select')
                         <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-2">
-                            <label class="block text-sm font-medium text-white/60 mb-2">Barcha mahsulotlar (All Products)</label>
+                            <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Barcha mahsulotlar') }} (All Products)</label>
                             @forelse($this->allProducts as $product)
                                 <div class="flex justify-between items-center p-3 bg-white/5 border border-dark-border rounded-lg hover:border-accent/50 transition-colors group">
-                                    <div class="flex-1 cursor-pointer" wire:click="addProductFromList({{ $product->id }})" title="Bitimga qo'shish">
+                                    <div class="flex-1 cursor-pointer" wire:click="addProductFromList({{ $product->id }})" title="{{ __('Bitimga qo\'shish') }}">
                                         <div class="text-sm font-medium text-white">{{ $product->name }}</div>
-                                        <div class="text-xs text-gray-400 mt-1">O'lchov: {{ $product->unit }}</div>
+                                        <div class="text-xs text-gray-400 mt-1">{{ __('O\'lchov') }}: {{ $product->unit }}</div>
                                     </div>
                                     <div class="flex items-center space-x-2">
                                         <!-- Add button (visible on hover) -->
-                                        <button wire:click="addProductFromList({{ $product->id }})" class="text-accent opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded" title="Qo'shish">
+                                        <button wire:click="addProductFromList({{ $product->id }})" class="text-accent opacity-0 group-hover:opacity-100 transition-opacity p-1 hover:bg-white/10 rounded" title="{{ __('Qo\'shish') }}">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                         </button>
                                         <!-- Delete from DB button -->
-                                        <button wire:click.stop="deleteProductFromDb({{ $product->id }})" class="text-gray-500 hover:text-red-400 p-1 hover:bg-white/10 rounded transition-colors" title="Bazadan o'chirish">
+                                        <button wire:click.stop="deleteProductFromDb({{ $product->id }})" class="text-gray-500 hover:text-red-400 p-1 hover:bg-white/10 rounded transition-colors" title="{{ __('Bazadan o\'chirish') }}">
                                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>
                                     </div>
                                 </div>
                             @empty
                                 <div class="text-sm text-gray-500 text-center py-4 border border-dashed border-dark-border rounded-lg">
-                                    Hozircha mahsulot yo'q. "Yangi qo'shish" orqali yarating.
+                                    {{ __('Hozircha mahsulot yo\'q. "Yangi qo\'shish" orqali yarating.') }}
                                 </div>
                             @endforelse
                         </div>
                     @else
                         <div class="space-y-4 bg-white/5 p-4 rounded-xl border border-white/10">
                             <div>
-                                <label class="block text-sm font-medium text-white/60 mb-2">Mahsulot nomi</label>
-                                <input type="text" wire:model="newProductName" placeholder="Masalan: Veb sayt yaratish" class="w-full bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
+                                <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Mahsulot nomi') }}</label>
+                                <input type="text" wire:model="newProductName" placeholder="{{ __('Masalan: Veb sayt yaratish') }}" class="w-full bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
                                 @error('newProductName') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-white/60 mb-2">O'lchov birligi</label>
+                                <label class="block text-sm font-medium text-white/60 mb-2">{{ __('O\'lchov birligi') }}</label>
                                 <select wire:model="newProductUnit" class="w-full bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
                                     <option value="dona">dona</option>
                                     <option value="kg">kg</option>
@@ -429,14 +429,14 @@
                                 </select>
                             </div>
                             <button wire:click="createAndAddProduct" class="w-full py-2 bg-accent/20 text-accent border border-accent/50 rounded-lg hover:bg-accent hover:text-white transition-colors text-sm font-medium">
-                                Yaratish va Biriktirish
+                                {{ __('Yaratish va Biriktirish') }}
                             </button>
                         </div>
                     @endif
 
                     <!-- Selected Products List -->
                     <div class="pt-6 border-t border-white/10 space-y-4">
-                        <label class="block text-sm font-medium text-white/60 mb-2">Biriktirilgan mahsulotlar</label>
+                        <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Biriktirilgan mahsulotlar') }}</label>
                         
                         @if(count($dealProducts) > 0)
                             <div class="space-y-2">
@@ -450,7 +450,7 @@
                                                 <input type="tel" wire:model.live="dealProducts.{{ $index }}.quantity" class="w-12 bg-transparent text-white text-sm text-center outline-none">
                                                 <span class="text-xs text-gray-400">{{ $product['unit'] ?? 'dona' }}</span>
                                             </div>
-                                            <button wire:click="removeProduct({{ $index }})" class="text-gray-500 hover:text-red-400 transition-colors" title="Ro'yxatdan olib tashlash">
+                                            <button wire:click="removeProduct({{ $index }})" class="text-gray-500 hover:text-red-400 transition-colors" title="{{ __('Ro\'yxatdan olib tashlash') }}">
                                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                                             </button>
                                         </div>
@@ -459,7 +459,7 @@
                             </div>
                         @else
                             <div class="text-sm text-gray-500 text-center py-4 border border-dashed border-dark-border rounded-lg">
-                                Hozircha mahsulot qo'shilmagan
+                                {{ __('Hozircha mahsulot qo\'shilmagan') }}
                             </div>
                         @endif
                     </div>
@@ -469,13 +469,13 @@
 
     <!-- Deal Details Slide-Over -->
     @if($selectedDeal)
-    <x-slide-over wire:model="isViewingDeal" id="viewDealPanel" title="Bitim Tafsilotlari" maxWidth="4xl">
+    <x-slide-over wire:model="isViewingDeal" id="viewDealPanel" title="{{ __('Bitim Tafsilotlari') }}" maxWidth="4xl">
         <x-slot:actions>
             <a href="{{ route('projects.tasks', ['dealId' => $selectedDeal->id]) }}" class="px-5 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-lg transition-colors shadow-[0_0_15px_rgba(155,114,255,0.4)]">
-                Vazifalarga o'tish
+                {{ __('Vazifalarga o\'tish') }}
             </a>
             <button wire:click="closeDealView" class="px-5 py-2 bg-dark-surface hover:bg-white/5 border border-dark-border text-white text-sm font-semibold rounded-lg transition-colors">
-                Yopish
+                {{ __('Yopish') }}
             </button>
         </x-slot:actions>
 
@@ -494,27 +494,27 @@
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
                     <div>
-                        <p class="text-xs text-dark-muted font-semibold uppercase mb-1">Mijoz</p>
-                        <p class="text-white font-medium">{{ $selectedDeal->contact->name ?? 'Noma\'lum' }}</p>
+                        <p class="text-xs text-dark-muted font-semibold uppercase mb-1">{{ __('Mijoz') }}</p>
+                        <p class="text-white font-medium">{{ $selectedDeal->contact->name ?? __('Noma\'lum') }}</p>
                     </div>
                     <div>
-                        <p class="text-xs text-dark-muted font-semibold uppercase mb-1">Telefon</p>
-                        <p class="text-white font-medium">{{ $selectedDeal->contact->phone ?? 'Noma\'lum' }}</p>
+                        <p class="text-xs text-dark-muted font-semibold uppercase mb-1">{{ __('Telefon') }}</p>
+                        <p class="text-white font-medium">{{ $selectedDeal->contact->phone ?? __('Noma\'lum') }}</p>
                     </div>
                     <div>
-                        <p class="text-xs text-dark-muted font-semibold uppercase mb-1">Boshlanish</p>
+                        <p class="text-xs text-dark-muted font-semibold uppercase mb-1">{{ __('Boshlanish') }}</p>
                         <p class="text-white font-medium">{{ $selectedDeal->start_date ? $selectedDeal->start_date->format('d.m.Y H:i') : '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-xs text-dark-muted font-semibold uppercase mb-1">Tugash</p>
-                        <p class="text-white font-medium">{{ $selectedDeal->end_date ? $selectedDeal->end_date->format('d.m.Y H:i') : 'Cheklanmagan' }}</p>
+                        <p class="text-xs text-dark-muted font-semibold uppercase mb-1">{{ __('Tugash') }}</p>
+                        <p class="text-white font-medium">{{ $selectedDeal->end_date ? $selectedDeal->end_date->format('d.m.Y H:i') : __('Cheklanmagan') }}</p>
                     </div>
                 </div>
             </div>
 
             <!-- Assignments Section -->
             <div>
-                <h3 class="text-lg font-bold text-white mb-4">Mas'ullar (Biriktirilganlar)</h3>
+                <h3 class="text-lg font-bold text-white mb-4">{{ __('Mas\'ullar (Biriktirilganlar)') }}</h3>
                 
                 @if(auth()->user()->hasRole('Admin') || auth()->user()->can('assign_deal') || auth()->user()->managerOf)
                     <!-- Multi-assignment Form Component pattern -->
@@ -528,7 +528,7 @@
                     }">
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
-                                <h5 class="text-xs font-bold text-gray-400 mb-2">Xodimlar</h5>
+                                <h5 class="text-xs font-bold text-gray-400 mb-2">{{ __('Xodimlar') }}</h5>
                                 @foreach($this->allUsers as $u)
                                     <label class="flex items-center space-x-3 text-sm text-gray-300 hover:text-white cursor-pointer py-1.5 px-2 hover:bg-white/5 rounded-lg transition-colors group">
                                         <input type="checkbox" value="{{ $u->id }}" x-model.number="users" @change="save()" class="rounded bg-black/50 border-white/20 text-accent focus:ring-accent focus:ring-offset-0 focus:ring-2 focus:border-accent w-4 h-4 transition-all cursor-pointer">
@@ -537,7 +537,7 @@
                                 @endforeach
                             </div>
                             <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
-                                <h5 class="text-xs font-bold text-gray-400 mb-2">Rollar</h5>
+                                <h5 class="text-xs font-bold text-gray-400 mb-2">{{ __('Rollar') }}</h5>
                                 @foreach(\App\Models\Role::whereNotIn('name', ['Admin'])->get() as $r)
                                     <label class="flex items-center space-x-3 text-sm text-gray-300 hover:text-white cursor-pointer py-1.5 px-2 hover:bg-white/5 rounded-lg transition-colors group">
                                         <input type="checkbox" value="{{ $r->id }}" x-model.number="roles" @change="save()" class="rounded bg-black/50 border-white/20 text-accent focus:ring-accent focus:ring-offset-0 focus:ring-2 focus:border-accent w-4 h-4 transition-all cursor-pointer">
@@ -546,7 +546,7 @@
                                 @endforeach
                             </div>
                             <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
-                                <h5 class="text-xs font-bold text-gray-400 mb-2">Jamoalar</h5>
+                                <h5 class="text-xs font-bold text-gray-400 mb-2">{{ __('Jamoalar') }}</h5>
                                 @foreach(\App\Models\Team::all() as $t)
                                     <label class="flex items-center space-x-3 text-sm text-gray-300 hover:text-white cursor-pointer py-1.5 px-2 hover:bg-white/5 rounded-lg transition-colors group">
                                         <input type="checkbox" value="{{ $t->id }}" x-model.number="teams" @change="save()" class="rounded bg-black/50 border-white/20 text-accent focus:ring-accent focus:ring-offset-0 focus:ring-2 focus:border-accent w-4 h-4 transition-all cursor-pointer">
@@ -585,22 +585,22 @@
                             <p class="text-white mt-1 capitalize">{{ $selectedDeal->source }}</p>
                         </div>
                         <div>
-                            <span class="text-xs text-dark-muted uppercase font-bold">Tafsilotlar</span>
-                            <p class="text-white mt-1 text-sm whitespace-pre-line">{{ $selectedDeal->description ?: 'Kiritilmagan' }}</p>
+                            <span class="text-xs text-dark-muted uppercase font-bold">{{ __('Tafsilotlar') }}</span>
+                            <p class="text-white mt-1 text-sm whitespace-pre-line">{{ $selectedDeal->description ?: __('Kiritilmagan') }}</p>
                         </div>
                     </div>
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-bold text-white mb-4">Mahsulotlar (Products)</h3>
+                    <h3 class="text-lg font-bold text-white mb-4">{{ __('Mahsulotlar') }} (Products)</h3>
                     @if($selectedDeal->products->count() > 0)
                         <div class="bg-black/20 border border-dark-border rounded-xl overflow-hidden">
                             <table class="w-full text-left text-sm text-gray-300">
                                 <thead class="bg-black/40 text-xs text-gray-400">
                                     <tr>
-                                        <th class="px-4 py-3 font-semibold">Nomi</th>
-                                        <th class="px-4 py-3 font-semibold text-center">Miqdori</th>
-                                        <th class="px-4 py-3 font-semibold text-right">Narxi</th>
+                                        <th class="px-4 py-3 font-semibold">{{ __('Nomi') }}</th>
+                                        <th class="px-4 py-3 font-semibold text-center">{{ __('Miqdori') }}</th>
+                                        <th class="px-4 py-3 font-semibold text-right">{{ __('Narxi') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-dark-border/50">
@@ -616,7 +616,7 @@
                         </div>
                     @else
                         <div class="bg-white/5 border border-dashed border-white/10 rounded-xl p-6 text-center text-gray-400 text-sm">
-                            Mahsulotlar qo'shilmagan
+                            {{ __('Mahsulotlar qo\'shilmagan') }}
                         </div>
                     @endif
                 </div>

@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
         <h2 class="font-bold text-2xl text-white tracking-tight">
-            Kompaniya Ombri (Storage)
+            {{ __('Kompaniya Ombri (Storage)') }}
         </h2>
     </x-slot>
 
@@ -21,14 +21,14 @@
         @if(!$tenant->storage_chat_id)
             @if(Auth::user()->hasRole('Admin') || Auth::user()->id === $tenant->owner_id)
                 <div class="bg-black/20 isolate border border-dark-border p-8 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl max-w-3xl">
-                    <h3 class="text-xl font-bold text-white mb-4">Storage tizimini sozlash</h3>
+                    <h3 class="text-xl font-bold text-white mb-4">{{ __('Storage tizimini sozlash') }}</h3>
                     <div class="text-gray-300 space-y-4 mb-8 text-sm">
-                        <p>Fayllarni markazlashgan holda saqlash uchun Telegram Yopiq Guruhini (Private Group) tizimga ulashingiz kerak:</p>
+                        <p>{!! __('Fayllarni markazlashgan holda saqlash uchun Telegram Yopiq Guruhini (Private Group) tizimga ulashingiz kerak:') !!}</p>
                         <ol class="list-decimal pl-5 space-y-2 text-accent">
-                            <li>Telegramda yangi <b>Yopiq guruh (Private Group)</b> yarating.</li>
-                            <li>Tizim botini (<span class="text-white font-mono">{{ "@" }}{{ env('TELEGRAM_BOT_USERNAME', 'WipeBitrixBot') }}</span>) shu guruhga qo'shing.</li>
-                            <li>Botga guruhda <b>Admin</b> huquqlarini bering.</li>
-                            <li>Guruhga quyidagi maxsus buyruqni yuboring:</li>
+                            <li>{!! __('Telegramda yangi <b>Yopiq guruh (Private Group)</b> yarating.') !!}</li>
+                            <li>{!! __('Tizim botini (<span class="text-white font-mono">:bot</span>) shu guruhga qo\'shing.', ['bot' => '@' . env('TELEGRAM_BOT_USERNAME', 'WipeBitrixBot')]) !!}</li>
+                            <li>{!! __('Botga guruhda <b>Admin</b> huquqlarini bering.') !!}</li>
+                            <li>{!! __('Guruhga quyidagi maxsus buyruqni yuboring:') !!}</li>
                         </ol>
                         
                         <div class="mt-4 p-4 bg-black/40 border border-dark-border rounded-xl">
@@ -40,7 +40,7 @@
                 </div>
             @else
                 <div class="bg-black/20 isolate border border-dark-border p-8 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl max-w-3xl">
-                    <p class="text-gray-300">Kompaniya rahbari hali Storage tizimini sozlamagan. Iltimos kuting.</p>
+                    <p class="text-gray-300">{{ __('Kompaniya rahbari hali Storage tizimini sozlamagan. Iltimos kuting.') }}</p>
                 </div>
             @endif
         @else
@@ -64,13 +64,13 @@
                     <div class="flex items-center space-x-4">
                         @if($isCreatingFolder)
                             <div class="flex items-center space-x-2">
-                                <input type="text" wire:model.defer="newFolderName" placeholder="Papka nomi" class="bg-black/40 border border-dark-border rounded-xl text-white px-3 py-1.5 text-sm focus:outline-none focus:border-accent w-40">
+                                <input type="text" wire:model.defer="newFolderName" placeholder="{{ __('Papka nomi') }}" class="bg-black/40 border border-dark-border rounded-xl text-white px-3 py-1.5 text-sm focus:outline-none focus:border-accent w-40">
                                 <button wire:click="saveFolder" class="text-green-400 hover:text-green-300">✓</button>
                                 <button wire:click="$set('isCreatingFolder', false)" class="text-red-400 hover:text-red-300">✕</button>
                             </div>
                         @else
                             <button wire:click="$set('isCreatingFolder', true)" class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-xl text-white bg-dark-bg border border-dark-border hover:border-accent/50 transition-all">
-                                + Yangi papka
+                                + {{ __('Yangi papka') }}
                             </button>
                         @endif
 
@@ -82,12 +82,12 @@
                                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                 </svg>
-                                Fayl tanlash
+                                {{ __('Fayl tanlash') }}
                             </label>
 
                             @if($fileToUpload)
                                 <button wire:click="uploadFile" class="inline-flex items-center px-4 py-2 text-sm font-semibold rounded-xl text-green-400 bg-green-400/10 border border-green-400/20 hover:bg-green-400/20 transition-all">
-                                    Yuklash
+                                    {{ __('Yuklash') }}
                                 </button>
                             @endif
                         </div>
@@ -100,8 +100,8 @@
                         <svg class="mx-auto h-12 w-12 text-dark-muted" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path>
                         </svg>
-                        <h3 class="mt-2 text-sm font-semibold text-white">Bo'sh ombor</h3>
-                        <p class="mt-1 text-sm text-dark-muted">Bu papkada hech narsa yo'q.</p>
+                        <h3 class="mt-2 text-sm font-semibold text-white">{{ __('Bo\'sh ombor') }}</h3>
+                        <p class="mt-1 text-sm text-dark-muted">{{ __('Bu papkada hech narsa yo\'q.') }}</p>
                     </div>
                 @else
                     <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -150,14 +150,14 @@
                                     <p class="text-xs text-dark-muted">{{ number_format($file->file_size / 1024 / 1024, 2) }} MB</p>
                                     
                                     <div class="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                                        <button wire:click="downloadFile({{ $file->id }})" class="text-blue-400 hover:text-blue-300" title="Yuklab olish">
+                                        <button wire:click="downloadFile({{ $file->id }})" class="text-blue-400 hover:text-blue-300" title="{{ __('Yuklab olish') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
                                         </button>
                                         @if(Auth::user()->can('manage_storage') || Auth::user()->hasRole('Admin'))
-                                        <button wire:click="startRenamingFile({{ $file->id }}, '{{ addslashes($file->file_name) }}')" class="text-yellow-400 hover:text-yellow-300" title="Nomini o'zgartirish">
+                                        <button wire:click="startRenamingFile({{ $file->id }}, '{{ addslashes($file->file_name) }}')" class="text-yellow-400 hover:text-yellow-300" title="{{ __('Nomini o\'zgartirish') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                         </button>
-                                        <button wire:click="deleteFile({{ $file->id }})" class="text-red-400 hover:text-red-300" title="O'chirish">
+                                        <button wire:click="deleteFile({{ $file->id }})" class="text-red-400 hover:text-red-300" title="{{ __('O\'chirish') }}">
                                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                         </button>
                                         @endif
