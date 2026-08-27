@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit36793882908b6cbdd344b5a4840231db
+class ComposerStaticInitd07c52b8edbe0e7aff493fd5a885f41f
 {
     public static $files = array (
         '6e3fae29631ef280660b3cdad06f25a8' => __DIR__ . '/..' . '/symfony/deprecation-contracts/function.php',
@@ -584,7 +584,6 @@ class ComposerStaticInit36793882908b6cbdd344b5a4840231db
     );
 
     public static $classMap = array (
-        'App\\Actions\\CRM\\ConvertLeadToDealAction' => __DIR__ . '/../..' . '/app/Actions/CRM/ConvertLeadToDealAction.php',
         'App\\Actions\\CRM\\UpdateDealStageAction' => __DIR__ . '/../..' . '/app/Actions/CRM/UpdateDealStageAction.php',
         'App\\Actions\\Project\\AddCommentToTaskAction' => __DIR__ . '/../..' . '/app/Actions/Project/AddCommentToTaskAction.php',
         'App\\Actions\\Project\\ChangeTaskStatusAction' => __DIR__ . '/../..' . '/app/Actions/Project/ChangeTaskStatusAction.php',
@@ -595,6 +594,7 @@ class ComposerStaticInit36793882908b6cbdd344b5a4840231db
         'App\\DTOs\\Project\\TaskData' => __DIR__ . '/../..' . '/app/DTOs/Project/TaskData.php',
         'App\\Events\\TaskAssigned' => __DIR__ . '/../..' . '/app/Events/TaskAssigned.php',
         'App\\Events\\TaskCompleted' => __DIR__ . '/../..' . '/app/Events/TaskCompleted.php',
+        'App\\Http\\Controllers\\AdminAuthController' => __DIR__ . '/../..' . '/app/Http/Controllers/AdminAuthController.php',
         'App\\Http\\Controllers\\Auth\\AuthenticatedSessionController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/AuthenticatedSessionController.php',
         'App\\Http\\Controllers\\Auth\\BotLoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/BotLoginController.php',
         'App\\Http\\Controllers\\Auth\\ConfirmablePasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ConfirmablePasswordController.php',
@@ -612,15 +612,21 @@ class ComposerStaticInit36793882908b6cbdd344b5a4840231db
         'App\\Http\\Controllers\\StorageController' => __DIR__ . '/../..' . '/app/Http/Controllers/StorageController.php',
         'App\\Http\\Controllers\\SuperAdminController' => __DIR__ . '/../..' . '/app/Http/Controllers/SuperAdminController.php',
         'App\\Http\\Controllers\\TelegramWebhookController' => __DIR__ . '/../..' . '/app/Http/Controllers/TelegramWebhookController.php',
+        'App\\Http\\Middleware\\AdminTwoFactorMiddleware' => __DIR__ . '/../..' . '/app/Http/Middleware/AdminTwoFactorMiddleware.php',
         'App\\Http\\Middleware\\EnsureCompanySelected' => __DIR__ . '/../..' . '/app/Http/Middleware/EnsureCompanySelected.php',
+        'App\\Http\\Middleware\\SetLocale' => __DIR__ . '/../..' . '/app/Http/Middleware/SetLocale.php',
         'App\\Http\\Requests\\Auth\\LoginRequest' => __DIR__ . '/../..' . '/app/Http/Requests/Auth/LoginRequest.php',
         'App\\Http\\Requests\\ProfileUpdateRequest' => __DIR__ . '/../..' . '/app/Http/Requests/ProfileUpdateRequest.php',
+        'App\\Jobs\\ArchiveActivitiesJob' => __DIR__ . '/../..' . '/app/Jobs/ArchiveActivitiesJob.php',
         'App\\Listeners\\SendTaskAssignedNotification' => __DIR__ . '/../..' . '/app/Listeners/SendTaskAssignedNotification.php',
         'App\\Listeners\\SendTaskCompletedNotification' => __DIR__ . '/../..' . '/app/Listeners/SendTaskCompletedNotification.php',
+        'App\\Livewire\\AdminDashboardActivities' => __DIR__ . '/../..' . '/app/Livewire/AdminDashboardActivities.php',
+        'App\\Livewire\\ContactManager' => __DIR__ . '/../..' . '/app/Livewire/ContactManager.php',
         'App\\Livewire\\DealKanbanBoard' => __DIR__ . '/../..' . '/app/Livewire/DealKanbanBoard.php',
         'App\\Livewire\\EmployeeManager' => __DIR__ . '/../..' . '/app/Livewire/EmployeeManager.php',
         'App\\Livewire\\ProfileSettings' => __DIR__ . '/../..' . '/app/Livewire/ProfileSettings.php',
         'App\\Livewire\\SearchDropdown' => __DIR__ . '/../..' . '/app/Livewire/SearchDropdown.php',
+        'App\\Livewire\\StorageManager' => __DIR__ . '/../..' . '/app/Livewire/StorageManager.php',
         'App\\Livewire\\TaskKanbanBoard' => __DIR__ . '/../..' . '/app/Livewire/TaskKanbanBoard.php',
         'App\\Models\\Activity' => __DIR__ . '/../..' . '/app/Models/Activity.php',
         'App\\Models\\ApprovalRequest' => __DIR__ . '/../..' . '/app/Models/ApprovalRequest.php',
@@ -628,19 +634,19 @@ class ComposerStaticInit36793882908b6cbdd344b5a4840231db
         'App\\Models\\AutomationRule' => __DIR__ . '/../..' . '/app/Models/AutomationRule.php',
         'App\\Models\\Company' => __DIR__ . '/../..' . '/app/Models/Company.php',
         'App\\Models\\Contact' => __DIR__ . '/../..' . '/app/Models/Contact.php',
+        'App\\Models\\ContactGroup' => __DIR__ . '/../..' . '/app/Models/ContactGroup.php',
         'App\\Models\\CustomField' => __DIR__ . '/../..' . '/app/Models/CustomField.php',
         'App\\Models\\CustomFieldValue' => __DIR__ . '/../..' . '/app/Models/CustomFieldValue.php',
         'App\\Models\\Deal' => __DIR__ . '/../..' . '/app/Models/Deal.php',
-        'App\\Models\\Department' => __DIR__ . '/../..' . '/app/Models/Department.php',
         'App\\Models\\File' => __DIR__ . '/../..' . '/app/Models/File.php',
-        'App\\Models\\Lead' => __DIR__ . '/../..' . '/app/Models/Lead.php',
+        'App\\Models\\Folder' => __DIR__ . '/../..' . '/app/Models/Folder.php',
         'App\\Models\\Pipeline' => __DIR__ . '/../..' . '/app/Models/Pipeline.php',
         'App\\Models\\PipelineStage' => __DIR__ . '/../..' . '/app/Models/PipelineStage.php',
         'App\\Models\\Product' => __DIR__ . '/../..' . '/app/Models/Product.php',
-        'App\\Models\\Project' => __DIR__ . '/../..' . '/app/Models/Project.php',
         'App\\Models\\Role' => __DIR__ . '/../..' . '/app/Models/Role.php',
         'App\\Models\\Task' => __DIR__ . '/../..' . '/app/Models/Task.php',
         'App\\Models\\TaskComment' => __DIR__ . '/../..' . '/app/Models/TaskComment.php',
+        'App\\Models\\Team' => __DIR__ . '/../..' . '/app/Models/Team.php',
         'App\\Models\\Tenant' => __DIR__ . '/../..' . '/app/Models/Tenant.php',
         'App\\Models\\TenantUser' => __DIR__ . '/../..' . '/app/Models/TenantUser.php',
         'App\\Models\\User' => __DIR__ . '/../..' . '/app/Models/User.php',
@@ -649,6 +655,7 @@ class ComposerStaticInit36793882908b6cbdd344b5a4840231db
         'App\\Repositories\\Contracts\\TaskRepositoryInterface' => __DIR__ . '/../..' . '/app/Repositories/Contracts/TaskRepositoryInterface.php',
         'App\\Repositories\\Eloquent\\DealRepository' => __DIR__ . '/../..' . '/app/Repositories/Eloquent/DealRepository.php',
         'App\\Repositories\\Eloquent\\TaskRepository' => __DIR__ . '/../..' . '/app/Repositories/Eloquent/TaskRepository.php',
+        'App\\Services\\ActivityArchiver' => __DIR__ . '/../..' . '/app/Services/ActivityArchiver.php',
         'App\\Services\\AutomationEngine' => __DIR__ . '/../..' . '/app/Services/AutomationEngine.php',
         'App\\Services\\TelegramService' => __DIR__ . '/../..' . '/app/Services/TelegramService.php',
         'App\\Traits\\HasActivities' => __DIR__ . '/../..' . '/app/Traits/HasActivities.php',
@@ -8183,9 +8190,9 @@ class ComposerStaticInit36793882908b6cbdd344b5a4840231db
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit36793882908b6cbdd344b5a4840231db::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit36793882908b6cbdd344b5a4840231db::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit36793882908b6cbdd344b5a4840231db::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd07c52b8edbe0e7aff493fd5a885f41f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd07c52b8edbe0e7aff493fd5a885f41f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd07c52b8edbe0e7aff493fd5a885f41f::$classMap;
 
         }, null, ClassLoader::class);
     }

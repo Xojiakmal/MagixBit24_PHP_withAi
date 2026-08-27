@@ -2,22 +2,25 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h2 class="text-3xl font-bold text-white tracking-tight">Xodimlar va Jamoalar</h2>
-            <p class="text-dark-muted mt-1 text-sm">Kompaniya xodimlari va guruhlarni boshqarish</p>
+            <h2 class="text-3xl font-bold text-white tracking-tight"><?php echo e(__('Xodimlar va Jamoalar')); ?></h2>
+            <p class="text-dark-muted mt-1 text-sm"><?php echo e(__('Kompaniya xodimlari va guruhlarni boshqarish')); ?></p>
         </div>
     </div>
 
     <!-- View Tabs -->
     <div class="mb-6 flex items-center space-x-1 bg-white/5 p-1 rounded-xl w-fit border border-dark-border">
         <button wire:click="switchTab('employees')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors <?php echo e($activeTab === 'employees' ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-gray-400 hover:text-white hover:bg-white/5'); ?>">
-            Xodimlar
+            <?php echo e(__('Xodimlar')); ?>
+
         </button>
         <button wire:click="switchTab('teams')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors <?php echo e($activeTab === 'teams' ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-gray-400 hover:text-white hover:bg-white/5'); ?>">
-            Guruhlar (Teams)
+            <?php echo e(__('Guruhlar (Teams)')); ?>
+
         </button>
         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(Auth::user()->hasRole('Admin') || Auth::user()->can('manage_employees')): ?>
         <button wire:click="switchTab('roles')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors <?php echo e($activeTab === 'roles' ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-gray-400 hover:text-white hover:bg-white/5'); ?>">
-            Rollar va Ruxsatlar
+            <?php echo e(__('Rollar va Ruxsatlar')); ?>
+
         </button>
         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
     </div>
@@ -44,10 +47,10 @@
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(Auth::user()->hasRole('Admin') || Auth::user()->can('manage_employees') || Auth::user()->managerOf): ?>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(!$user->hasRole('Admin')): ?>
                                 <div>
-                                    <label class="block text-xs text-dark-muted mb-1 font-medium">Xodim roli:</label>
+                                    <label class="block text-xs text-dark-muted mb-1 font-medium"><?php echo e(__('Xodim roli:')); ?></label>
                                     <div class="relative">
                                         <select wire:change="assignRoleToUser(<?php echo e($user->id); ?>, $event.target.value)" class="w-full bg-black/40 border border-dark-border rounded-xl text-white px-3 py-2 text-sm focus:outline-none focus:border-accent appearance-none cursor-pointer">
-                                            <option value="" class="bg-dark-bg text-white">Xodim (Odatiy)</option>
+                                            <option value="" class="bg-dark-bg text-white"><?php echo e(__('Xodim (Odatiy)')); ?></option>
                                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $roles; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $role): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                                 <option value="<?php echo e($role->name); ?>" <?php echo e($user->hasRole($role->name) ? 'selected' : ''); ?> class="bg-dark-bg text-white"><?php echo e($role->name); ?></option>
                                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
@@ -64,13 +67,13 @@
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         <?php else: ?>
                             <div class="bg-white/5 border border-white/10 text-gray-300 px-4 py-2 rounded-xl text-sm">
-                                <?php echo e($user->roles->pluck('name')->implode(', ') ?: 'Xodim'); ?>
+                                <?php echo e($user->roles->pluck('name')->implode(', ') ?: __('Xodim')); ?>
 
                             </div>
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
 
                         <div class="mt-2 text-xs text-gray-400">
-                            <strong>Guruh:</strong> <?php echo e($user->team ? $user->team->name : 'Guruhsiz'); ?>
+                            <strong><?php echo e(__('Guruh:')); ?></strong> <?php echo e($user->team ? $user->team->name : __('Guruhsiz')); ?>
 
                         </div>
                     </div>
@@ -92,7 +95,7 @@
 
                                 </h3>
                                 <p class="text-sm text-dark-muted mt-1">
-                                    Menejer: <strong><?php echo e($team->manager ? $team->manager->name : 'Admin (Avtomatik)'); ?></strong>
+                                    <?php echo e(__('Menejer:')); ?> <strong><?php echo e($team->manager ? $team->manager->name : __('Admin (Avtomatik)')); ?></strong>
                                 </p>
                             </div>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(Auth::user()->hasRole('Admin') || Auth::user()->can('manage_employees')): ?>
@@ -100,7 +103,7 @@
                                 <button wire:click="editTeam(<?php echo e($team->id); ?>)" class="p-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 rounded-xl transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 </button>
-                                <button onclick="confirm('Guruhni o\'chirmoqchimisiz?') || event.stopImmediatePropagation()" wire:click="deleteTeam(<?php echo e($team->id); ?>)" class="p-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-xl transition-colors">
+                                <button onclick="confirm('<?php echo e(__('Guruhni o\'chirmoqchimisiz?')); ?>') || event.stopImmediatePropagation()" wire:click="deleteTeam(<?php echo e($team->id); ?>)" class="p-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-xl transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </div>
@@ -108,7 +111,7 @@
                         </div>
 
                         <div class="bg-black/30 rounded-2xl p-4 border border-dark-border">
-                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">Guruh a'zolari (<?php echo e($team->users->count()); ?> ta)</h4>
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3"><?php echo e(__('Guruh a\'zolari')); ?> (<?php echo e($team->users->count()); ?>)</h4>
                             <div class="flex flex-wrap gap-2">
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $team->users; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $member): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                     <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-accent/10 text-accent border border-accent/20">
@@ -116,7 +119,7 @@
 
                                     </span>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
-                                    <span class="text-xs text-dark-muted">Hozircha a'zolar yo'q.</span>
+                                    <span class="text-xs text-dark-muted"><?php echo e(__('Hozircha a\'zolar yo\'q.')); ?></span>
                                 <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             </div>
                         </div>
@@ -129,13 +132,13 @@
             <div>
                 <div class="bg-black/20 isolate border border-dark-border p-6 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl sticky top-6">
                     <h3 class="text-xl font-bold text-white mb-6">
-                        <?php echo e($isEditingTeam ? 'Guruhni Tahrirlash' : 'Yangi Guruh Yaratish'); ?>
+                        <?php echo e($isEditingTeam ? __('Guruhni Tahrirlash') : __('Yangi Guruh Yaratish')); ?>
 
                     </h3>
 
                     <form wire:submit.prevent="saveTeam" class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Guruh nomi *</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-1"><?php echo e(__('Guruh nomi *')); ?></label>
                             <input type="text" wire:model.defer="teamName" required class="w-full bg-black/40 border border-dark-border rounded-xl text-white px-4 py-2 focus:outline-none focus:border-accent">
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['teamName'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -148,9 +151,9 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Menejer (Ixtiyoriy)</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-1"><?php echo e(__('Menejer (Ixtiyoriy)')); ?></label>
                             <select wire:model.defer="teamManagerId" class="w-full bg-black/40 border border-dark-border rounded-xl text-white px-4 py-2 focus:outline-none focus:border-accent appearance-none">
-                                <option value="" class="bg-dark-bg">Tanlanmagan (Admin boshqaradi)</option>
+                                <option value="" class="bg-dark-bg"><?php echo e(__('Tanlanmagan (Admin boshqaradi)')); ?></option>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = \App\Models\User::whereHas('tenants', fn($q) => $q->where('tenant_users.tenant_id', $tenant->id))->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                     <option value="<?php echo e($u->id); ?>" class="bg-dark-bg"><?php echo e($u->name); ?></option>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
@@ -158,7 +161,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-3">Xodimlarni biriktirish</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-3"><?php echo e(__('Xodimlarni biriktirish')); ?></label>
                             <div class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = \App\Models\User::whereHas('tenants', fn($q) => $q->where('tenant_users.tenant_id', $tenant->id))->whereDoesntHave('roles', function($q){ $q->where('name', 'Admin'); })->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                     <label class="flex items-center p-3 border border-dark-border rounded-xl hover:bg-white/5 cursor-pointer transition-colors group <?php echo e(in_array($u->id, $teamMembers) ? 'border-accent bg-accent/5' : ''); ?>">
@@ -171,11 +174,13 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                         <div class="pt-4 flex space-x-3">
                             <button type="submit" class="flex-1 bg-accent hover:bg-accent-hover text-white font-bold py-2 px-4 rounded-xl shadow-[0_0_15px_rgba(155,114,255,0.4)] transition-all">
-                                Saqlash
+                                <?php echo e(__('Saqlash')); ?>
+
                             </button>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($isEditingTeam): ?>
                                 <button type="button" wire:click="resetTeamForm" class="px-4 py-2 bg-dark-border text-white rounded-xl hover:bg-gray-600 transition-colors">
-                                    Bekor qilish
+                                    <?php echo e(__('Bekor qilish')); ?>
+
                                 </button>
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
@@ -197,14 +202,14 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                 <button wire:click="editRole(<?php echo e($role->id); ?>)" class="p-2 bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 rounded-xl transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
                                 </button>
-                                <button onclick="confirm('O\'chirmoqchimisiz?') || event.stopImmediatePropagation()" wire:click="deleteRole(<?php echo e($role->id); ?>)" class="p-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-xl transition-colors">
+                                <button onclick="confirm('<?php echo e(__('O\'chirmoqchimisiz?')); ?>') || event.stopImmediatePropagation()" wire:click="deleteRole(<?php echo e($role->id); ?>)" class="p-2 bg-red-500/10 text-red-400 hover:bg-red-500/20 rounded-xl transition-colors">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </button>
                             </div>
                         </div>
 
                         <div class="space-y-1">
-                            <p class="text-xs text-dark-muted font-bold mb-2 uppercase">Ruxsatlar:</p>
+                            <p class="text-xs text-dark-muted font-bold mb-2 uppercase"><?php echo e(__('Ruxsatlar:')); ?></p>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $role->permissions; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $perm): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                 <div class="text-sm text-gray-300 flex items-center">
                                     <svg class="w-3 h-3 text-green-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"></path></svg>
@@ -212,7 +217,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                                 </div>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
-                                <div class="text-sm text-gray-500 italic">Ruxsatlar belgilanmagan</div>
+                                <div class="text-sm text-gray-500 italic"><?php echo e(__('Ruxsatlar belgilanmagan')); ?></div>
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
                     </div>
@@ -223,13 +228,13 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
             <div>
                 <div class="bg-black/20 isolate border border-dark-border p-6 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl sticky top-6">
                     <h3 class="text-xl font-bold text-white mb-6">
-                        <?php echo e($isEditingRole ? 'Rolni Tahrirlash' : 'Yangi Rol Yaratish'); ?>
+                        <?php echo e($isEditingRole ? __('Rolni Tahrirlash') : __('Yangi Rol Yaratish')); ?>
 
                     </h3>
 
                     <form wire:submit.prevent="saveRole" class="space-y-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-1">Rol nomi *</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-1"><?php echo e(__('Rol nomi *')); ?></label>
                             <input type="text" wire:model.defer="roleName" required class="w-full bg-black/40 border border-dark-border rounded-xl text-white px-4 py-2 focus:outline-none focus:border-accent">
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['roleName'];
 $__bag = $errors->getBag($__errorArgs[1] ?? 'default');
@@ -242,7 +247,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         </div>
 
                         <div>
-                            <label class="block text-sm font-medium text-gray-300 mb-3">Ruxsatlarni belgilang</label>
+                            <label class="block text-sm font-medium text-gray-300 mb-3"><?php echo e(__('Ruxsatlarni belgilang')); ?></label>
                             <div class="space-y-4 max-h-[50vh] overflow-y-auto pr-2 custom-scrollbar">
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $permissionsList; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $group => $perms): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                     <div class="bg-black/30 rounded-2xl p-4 border border-dark-border">
@@ -262,11 +267,13 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                         <div class="pt-4 flex space-x-3">
                             <button type="submit" class="flex-1 bg-accent hover:bg-accent-hover text-white font-bold py-2 px-4 rounded-xl shadow-[0_0_15px_rgba(155,114,255,0.4)] transition-all">
-                                Saqlash
+                                <?php echo e(__('Saqlash')); ?>
+
                             </button>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($isEditingRole): ?>
                                 <button type="button" wire:click="resetRoleForm" class="px-4 py-2 bg-dark-border text-white rounded-xl hover:bg-gray-600 transition-colors">
-                                    Bekor qilish
+                                    <?php echo e(__('Bekor qilish')); ?>
+
                                 </button>
                             <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>

@@ -27,9 +27,10 @@
                 <div>
                     <h3 class="text-lg font-bold text-white flex items-center">
                         <svg class="w-5 h-5 mr-2 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-                        Kompaniyaga qo'shilish kodi
+                        <?php echo e(__('Kompaniyaga qo\'shilish kodi')); ?>
+
                     </h3>
-                    <p class="text-sm text-accent/80 mt-1">Ushbu kodni yangi xodimlarga bering. Ular "Kompaniyaga qo'shilish" oynasida ushbu kodni kiritishlari kerak.</p>
+                    <p class="text-sm text-accent/80 mt-1"><?php echo e(__('Ushbu kodni yangi xodimlarga bering. Ular "Kompaniyaga qo\'shilish" oynasida ushbu kodni kiritishlari kerak.')); ?></p>
                 </div>
                 <div class="flex items-center space-x-3 bg-black/40 px-5 py-3 rounded-xl border border-dark-border">
                     <code class="text-accent font-mono text-xl font-bold select-all tracking-wider"><?php echo e($tenant->unique_link); ?></code>
@@ -47,8 +48,8 @@
                     <div class="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center mx-auto mb-6">
                         <svg class="w-10 h-10 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
                     </div>
-                    <h2 class="text-2xl font-bold text-white mb-4">Ruxsat etilmagan</h2>
-                    <p class="text-dark-muted">Sizga Bosh sahifani (Dashboard) ko'rish uchun ruxsat berilmagan. Iltimos, chap tarafdagi menyu orqali o'zingizga ruxsat etilgan bo'limlarga kiring yoki administratorga murojaat qiling.</p>
+                    <h2 class="text-2xl font-bold text-white mb-4"><?php echo e(__('Ruxsat etilmagan')); ?></h2>
+                    <p class="text-dark-muted"><?php echo e(__('Sizga Bosh sahifani (Dashboard) ko\'rish uchun ruxsat berilmagan. Iltimos, chap tarafdagi menyu orqali o\'zingizga ruxsat etilgan bo\'limlarga kiring yoki administratorga murojaat qiling.')); ?></p>
                 </div>
             </div>
         <?php else: ?>
@@ -58,7 +59,7 @@
             <div class="bg-black/20 isolate border border-dark-border p-6 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden group">
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-accent/10 rounded-full blur-2xl group-hover:bg-accent/20 transition-all duration-500"></div>
                 <div class="relative z-10">
-                    <p class="text-sm font-medium text-dark-muted mb-2">Umumiy Daromad</p>
+                    <p class="text-sm font-medium text-dark-muted mb-2"><?php echo e(__('Umumiy Daromad')); ?></p>
                     <h3 class="text-3xl font-bold text-white tracking-tight">$<?php echo e(number_format($totalRevenue, 2)); ?></h3>
                 </div>
                 <!-- Neon line underneath -->
@@ -68,7 +69,7 @@
             <div class="bg-black/20 isolate border border-dark-border p-6 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden group">
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl group-hover:bg-yellow-500/20 transition-all duration-500"></div>
                 <div class="relative z-10">
-                    <p class="text-sm font-medium text-dark-muted mb-2">Bajarilgan Vazifalar</p>
+                    <p class="text-sm font-medium text-dark-muted mb-2"><?php echo e(__('Bajarilgan Vazifalar')); ?></p>
                     <h3 class="text-3xl font-bold text-white tracking-tight"><?php echo e($completedTasks); ?></h3>
                 </div>
                 <!-- Neon line underneath -->
@@ -78,7 +79,7 @@
             <div class="bg-black/20 isolate border border-dark-border p-6 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden group">
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-green-500/10 rounded-full blur-2xl group-hover:bg-green-500/20 transition-all duration-500"></div>
                 <div class="relative z-10">
-                    <p class="text-sm font-medium text-dark-muted mb-2">Yangi Mijozlar</p>
+                    <p class="text-sm font-medium text-dark-muted mb-2"><?php echo e(__('Yangi Mijozlar')); ?></p>
                     <h3 class="text-3xl font-bold text-white tracking-tight"><?php echo e($newClients); ?></h3>
                 </div>
                 <!-- Neon line underneath -->
@@ -90,9 +91,9 @@
 
         <!-- Wallets/Summary Section placeholder -->
         <div class="bg-black/20 isolate border border-dark-border p-8 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl mb-8">
-            <h3 class="text-xl font-bold text-white mb-6">Xulosa</h3>
+            <h3 class="text-xl font-bold text-white mb-6"><?php echo e(__('Xulosa')); ?></h3>
             <div class="flex items-center justify-center h-48 border-2 border-dashed border-dark-border rounded-2xl">
-                <p class="text-dark-muted">Tez orada grafika va tahlillar shu yerda bo'ladi...</p>
+                <p class="text-dark-muted"><?php echo e(__('Tez orada grafika va tahlillar shu yerda bo\'ladi...')); ?></p>
             </div>
         </div>
 
