@@ -46,8 +46,8 @@
             <div class="bg-black/20 isolate border border-dark-border p-6 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden group">
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-accent/10 rounded-full blur-2xl group-hover:bg-accent/20 transition-all duration-500"></div>
                 <div class="relative z-10">
-                    <p class="text-sm font-medium text-dark-muted mb-2">{{ __('Umumiy Daromad') }}</p>
-                    <h3 class="text-3xl font-bold text-white tracking-tight">${{ number_format($totalRevenue, 2) }}</h3>
+                    <p class="text-sm font-medium text-dark-muted mb-2">{{ __('Jarayondagi pul') }}</p>
+                    <h3 class="text-3xl font-bold text-white tracking-tight">${{ number_format($inProgressRevenue, 0, '.', ' ') }}</h3>
                 </div>
                 <!-- Neon line underneath -->
                 <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-accent to-blue-500 opacity-50"></div>
@@ -56,8 +56,8 @@
             <div class="bg-black/20 isolate border border-dark-border p-6 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl relative overflow-hidden group">
                 <div class="absolute -top-12 -right-12 w-32 h-32 bg-yellow-500/10 rounded-full blur-2xl group-hover:bg-yellow-500/20 transition-all duration-500"></div>
                 <div class="relative z-10">
-                    <p class="text-sm font-medium text-dark-muted mb-2">{{ __('Bajarilgan Vazifalar') }}</p>
-                    <h3 class="text-3xl font-bold text-white tracking-tight">{{ $completedTasks }}</h3>
+                    <p class="text-sm font-medium text-dark-muted mb-2">{{ __('Yopilgan pul') }}</p>
+                    <h3 class="text-3xl font-bold text-white tracking-tight">${{ number_format($closedRevenue, 0, '.', ' ') }}</h3>
                 </div>
                 <!-- Neon line underneath -->
                 <div class="absolute bottom-0 left-0 w-full h-1 bg-gradient-to-r from-yellow-500 to-orange-500 opacity-50"></div>

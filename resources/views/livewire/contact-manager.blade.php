@@ -19,14 +19,17 @@
                                 <span class="font-medium truncate pr-2 text-sm">{{ $group->name }}</span>
                                 <div class="flex items-center space-x-2">
                                     <span class="text-xs text-dark-muted">{{ $group->contacts()->count() }}</span>
+                                    @can('manage_contacts')
                                     <button wire:click.stop="deleteGroup({{ $group->id }})" class="text-gray-500 hover:text-red-400 p-1" onclick="confirm('{{ __('Guruhni o\'chirish barcha ichidagi kontaktlarni ham o\'chirishi mumkin. Tasdiqlaysizmi?') }}') || event.stopImmediatePropagation()">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
+                                    @endcan
                                 </div>
                             </div>
                         @endforeach
                     </div>
                     
+                    @can('manage_contacts')
                     @if($isEditingGroup)
                         <div class="mt-4 space-y-2">
                             <input type="text" wire:model.defer="groupName" placeholder="{{ __('Guruh nomi (Masalan: Haydovchilar)') }}" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
@@ -41,6 +44,7 @@
                             {{ __('Yangi guruh qo\'shish') }}
                         </button>
                     @endif
+                    @endcan
                 </div>
             </div>
 
@@ -56,10 +60,12 @@
                             </div>
                             <div class="flex items-center space-x-1 bg-white/5 p-1 rounded-xl w-fit border border-dark-border">
                                 <button wire:click="setView('contacts', {{ $activeGroupId }})" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'contacts' ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">{{ __('Ro\'yxat') }}</button>
+                                @can('manage_contacts')
                                 <button wire:click="setView('form_builder', {{ $activeGroupId }})" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center {{ $currentView === 'form_builder' ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent' }}">
                                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                    {{ __('Forma Sozlamalari (Maydonlar)') }}
+                                    {{ __('Forma Sozlamalari') }}
                                 </button>
+                                @endcan
                             </div>
                         </div>
 
@@ -116,14 +122,19 @@
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-400 mb-1">{{ __('Turi') }}</label>
-                                            <select wire:model.live="newFieldType" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
-                                                <option value="string">{{ __('Qisqa matn (String)') }}</option>
-                                                <option value="text">{{ __('Katta matn (Text)') }}</option>
-                                                <option value="number">{{ __('Raqam (Number)') }}</option>
-                                                <option value="date">{{ __('Sana (Date)') }}</option>
-                                                <option value="boolean">{{ __('Ha/Yo\'q (Boolean)') }}</option>
-                                                <option value="select">{{ __('Variantli (Select Option)') }}</option>
-                                            </select>
+                                            <!-- Custom Select for Field Type -->
+                                            <div x-data="{ open: false, selected: @entangle('newFieldType').live }" class="relative">
+                                                <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                                                    <span x-text="selected === 'text' ? 'Text' : (selected === 'number' ? 'Number' : (selected === 'date' ? 'Date' : (selected === 'select' ? 'Select (Dropdown)' : 'Text')))"></span>
+                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                </button>
+                                                <div x-show="open" x-transition class="absolute z-[100] w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
+                                                    <div @click="selected = 'text'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Text</div>
+                                                    <div @click="selected = 'number'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Number</div>
+                                                    <div @click="selected = 'date'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Date</div>
+                                                    <div @click="selected = 'select'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Select (Dropdown)</div>
+                                                </div>
+                                            </div>
                                         </div>
                                         @if($newFieldType === 'select')
                                             <div class="md:col-span-2">
@@ -148,10 +159,12 @@
                         @else
                             <div class="mb-6 flex justify-between items-center">
                                 <h4 class="text-lg font-bold">{{ __('Kontaktlar Ro\'yxati') }}</h4>
+                                @can('manage_contacts')
                                 <button wire:click="editContact" class="px-4 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-xl transition-colors shadow-[0_0_15px_rgba(155,114,255,0.4)] flex items-center">
                                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                     {{ __('Yangi Kontakt') }}
                                 </button>
+                                @endcan
                             </div>
 
                             @if($isEditingContact)
@@ -178,13 +191,20 @@
                                                 @if($cf->type === 'text')
                                                     <textarea wire:model="dynamicFieldsData.{{ $cf->id }}" rows="3" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none custom-scrollbar transition-all"></textarea>
                                                 @elseif($cf->type === 'select')
-                                                    @php $opts = $cf->options ? json_decode($cf->options, true) : []; @endphp
-                                                    <select wire:model="dynamicFieldsData.{{ $cf->id }}" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
-                                                        <option value="">{{ __('Tanlang...') }}</option>
-                                                        @foreach($opts as $opt)
-                                                            <option value="{{ $opt }}" class="bg-dark-surface">{{ $opt }}</option>
-                                                        @endforeach
-                                                    </select>
+                                                    <!-- Custom Select for Dynamic Field -->
+                                                    <div x-data="{ open: false, selected: @entangle('dynamicFieldsData.' . $cf->id) }" class="relative">
+                                                        <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                                                            <span x-text="selected ? selected : '-- {{ __('Tanlang') }} --'"></span>
+                                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                        </button>
+                                                        <div x-show="open" x-transition class="absolute z-[100] w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
+                                                            <div @click="selected = ''; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">-- {{ __('Tanlang') }} --</div>
+                                                            @foreach(explode(',', $cf->options) as $opt)
+                                                                @php $opt = trim($opt); @endphp
+                                                                <div @click="selected = '{{ $opt }}'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ $opt }}</div>
+                                                            @endforeach
+                                                        </div>
+                                                    </div>
                                                 @elseif($cf->type === 'boolean')
                                                     <div class="flex space-x-4 mt-2">
                                                         <label class="flex items-center space-x-3 cursor-pointer group">
@@ -222,7 +242,9 @@
                                             @foreach($customFields->take(3) as $cf)
                                                 <th class="px-4 py-3 font-semibold">{{ $cf->name }}</th>
                                             @endforeach
+                                            @can('manage_contacts')
                                             <th class="px-4 py-3 font-semibold text-right">{{ __('Amallar') }}</th>
+                                            @endcan
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-dark-border/50">
@@ -242,6 +264,7 @@
                                                         @endif
                                                     </td>
                                                 @endforeach
+                                                @can('manage_contacts')
                                                 <td class="px-4 py-3 text-right">
                                                     <button wire:click="editContact({{ $contact->id }})" class="text-blue-400 hover:text-blue-300 mr-2 p-1">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
@@ -250,6 +273,7 @@
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                                     </button>
                                                 </td>
+                                                @endcan
                                             </tr>
                                         @empty
                                             <tr>

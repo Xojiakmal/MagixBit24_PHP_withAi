@@ -19,14 +19,17 @@
                                 <span class="font-medium truncate pr-2 text-sm"><?php echo e($group->name); ?></span>
                                 <div class="flex items-center space-x-2">
                                     <span class="text-xs text-dark-muted"><?php echo e($group->contacts()->count()); ?></span>
+                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage_contacts')): ?>
                                     <button wire:click.stop="deleteGroup(<?php echo e($group->id); ?>)" class="text-gray-500 hover:text-red-400 p-1" onclick="confirm('<?php echo e(__('Guruhni o\'chirish barcha ichidagi kontaktlarni ham o\'chirishi mumkin. Tasdiqlaysizmi?')); ?>') || event.stopImmediatePropagation()">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                     </button>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                     </div>
                     
+                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage_contacts')): ?>
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($isEditingGroup): ?>
                         <div class="mt-4 space-y-2">
                             <input type="text" wire:model.defer="groupName" placeholder="<?php echo e(__('Guruh nomi (Masalan: Haydovchilar)')); ?>" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
@@ -42,6 +45,7 @@
 
                         </button>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                    <?php endif; ?>
                 </div>
             </div>
 
@@ -57,11 +61,13 @@
                             </div>
                             <div class="flex items-center space-x-1 bg-white/5 p-1 rounded-xl w-fit border border-dark-border">
                                 <button wire:click="setView('contacts', <?php echo e($activeGroupId); ?>)" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors <?php echo e($currentView === 'contacts' ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-gray-400 hover:text-white hover:bg-white/5'); ?>"><?php echo e(__('Ro\'yxat')); ?></button>
+                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage_contacts')): ?>
                                 <button wire:click="setView('form_builder', <?php echo e($activeGroupId); ?>)" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center <?php echo e($currentView === 'form_builder' ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-gray-400 hover:text-white hover:bg-white/5 border border-transparent'); ?>">
                                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                                    <?php echo e(__('Forma Sozlamalari (Maydonlar)')); ?>
+                                    <?php echo e(__('Forma Sozlamalari')); ?>
 
                                 </button>
+                                <?php endif; ?>
                             </div>
                         </div>
 
@@ -125,14 +131,19 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                         </div>
                                         <div>
                                             <label class="block text-sm font-medium text-gray-400 mb-1"><?php echo e(__('Turi')); ?></label>
-                                            <select wire:model.live="newFieldType" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
-                                                <option value="string"><?php echo e(__('Qisqa matn (String)')); ?></option>
-                                                <option value="text"><?php echo e(__('Katta matn (Text)')); ?></option>
-                                                <option value="number"><?php echo e(__('Raqam (Number)')); ?></option>
-                                                <option value="date"><?php echo e(__('Sana (Date)')); ?></option>
-                                                <option value="boolean"><?php echo e(__('Ha/Yo\'q (Boolean)')); ?></option>
-                                                <option value="select"><?php echo e(__('Variantli (Select Option)')); ?></option>
-                                            </select>
+                                            <!-- Custom Select for Field Type -->
+                                            <div x-data="{ open: false, selected: <?php if ((object) ('newFieldType') instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('newFieldType'->value()); ?>')<?php echo e('newFieldType'->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('newFieldType'); ?>')<?php endif; ?>.live }" class="relative">
+                                                <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                                                    <span x-text="selected === 'text' ? 'Text' : (selected === 'number' ? 'Number' : (selected === 'date' ? 'Date' : (selected === 'select' ? 'Select (Dropdown)' : 'Text')))"></span>
+                                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                </button>
+                                                <div x-show="open" x-transition class="absolute z-[100] w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
+                                                    <div @click="selected = 'text'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Text</div>
+                                                    <div @click="selected = 'number'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Number</div>
+                                                    <div @click="selected = 'date'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Date</div>
+                                                    <div @click="selected = 'select'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Select (Dropdown)</div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($newFieldType === 'select'): ?>
                                             <div class="md:col-span-2">
@@ -158,11 +169,13 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                         <?php else: ?>
                             <div class="mb-6 flex justify-between items-center">
                                 <h4 class="text-lg font-bold"><?php echo e(__('Kontaktlar Ro\'yxati')); ?></h4>
+                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage_contacts')): ?>
                                 <button wire:click="editContact" class="px-4 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-xl transition-colors shadow-[0_0_15px_rgba(155,114,255,0.4)] flex items-center">
                                     <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
                                     <?php echo e(__('Yangi Kontakt')); ?>
 
                                 </button>
+                                <?php endif; ?>
                             </div>
 
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($isEditingContact): ?>
@@ -203,13 +216,20 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($cf->type === 'text'): ?>
                                                     <textarea wire:model="dynamicFieldsData.<?php echo e($cf->id); ?>" rows="3" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none custom-scrollbar transition-all"></textarea>
                                                 <?php elseif($cf->type === 'select'): ?>
-                                                    <?php $opts = $cf->options ? json_decode($cf->options, true) : []; ?>
-                                                    <select wire:model="dynamicFieldsData.<?php echo e($cf->id); ?>" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
-                                                        <option value=""><?php echo e(__('Tanlang...')); ?></option>
-                                                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $opts; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $opt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                                                            <option value="<?php echo e($opt); ?>" class="bg-dark-surface"><?php echo e($opt); ?></option>
-                                                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
-                                                    </select>
+                                                    <!-- Custom Select for Dynamic Field -->
+                                                    <div x-data="{ open: false, selected: <?php if ((object) ('dynamicFieldsData.' . $cf->id) instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('dynamicFieldsData.' . $cf->id->value()); ?>')<?php echo e('dynamicFieldsData.' . $cf->id->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('dynamicFieldsData.' . $cf->id); ?>')<?php endif; ?> }" class="relative">
+                                                        <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                                                            <span x-text="selected ? selected : '-- <?php echo e(__('Tanlang')); ?> --'"></span>
+                                                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                                        </button>
+                                                        <div x-show="open" x-transition class="absolute z-[100] w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
+                                                            <div @click="selected = ''; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">-- <?php echo e(__('Tanlang')); ?> --</div>
+                                                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = explode(',', $cf->options); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $opt): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                                                                <?php $opt = trim($opt); ?>
+                                                                <div @click="selected = '<?php echo e($opt); ?>'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors"><?php echo e($opt); ?></div>
+                                                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                                                        </div>
+                                                    </div>
                                                 <?php elseif($cf->type === 'boolean'): ?>
                                                     <div class="flex space-x-4 mt-2">
                                                         <label class="flex items-center space-x-3 cursor-pointer group">
@@ -254,7 +274,9 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $customFields->take(3); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $cf): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
                                                 <th class="px-4 py-3 font-semibold"><?php echo e($cf->name); ?></th>
                                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                                            <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage_contacts')): ?>
                                             <th class="px-4 py-3 font-semibold text-right"><?php echo e(__('Amallar')); ?></th>
+                                            <?php endif; ?>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-dark-border/50">
@@ -275,6 +297,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                                                     </td>
                                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                                                <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('manage_contacts')): ?>
                                                 <td class="px-4 py-3 text-right">
                                                     <button wire:click="editContact(<?php echo e($contact->id); ?>)" class="text-blue-400 hover:text-blue-300 mr-2 p-1">
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
@@ -283,6 +306,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                                     </button>
                                                 </td>
+                                                <?php endif; ?>
                                             </tr>
                                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                                             <tr>

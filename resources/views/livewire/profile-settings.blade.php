@@ -38,10 +38,17 @@
                 <!-- Locale/Language -->
                 <div>
                     <label for="locale" class="block text-sm font-medium text-gray-300 mb-2">{{ __('Til') }} / Language</label>
-                    <select id="locale" wire:model="locale" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all">
-                        <option value="en" class="bg-dark-surface">English</option>
-                        <option value="uz" class="bg-dark-surface">O'zbek</option>
-                    </select>
+                    <!-- Custom Select for Locale -->
+                    <div x-data="{ open: false, selected: @entangle('locale') }" class="relative">
+                        <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all">
+                            <span x-text="selected === 'en' ? 'English' : (selected === 'uz' ? 'O\'zbekcha' : '{{ __('Tanlang') }}')"></span>
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                        </button>
+                        <div x-show="open" x-transition class="absolute z-[100] w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
+                            <div @click="selected = 'en'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">English</div>
+                            <div @click="selected = 'uz'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">O'zbekcha</div>
+                        </div>
+                    </div>
                     @error('locale') <span class="text-red-400 text-sm mt-1">{{ $message }}</span> @enderror
                 </div>
 

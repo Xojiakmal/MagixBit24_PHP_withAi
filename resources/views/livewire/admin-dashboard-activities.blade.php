@@ -122,7 +122,7 @@
     </div>
 
     <!-- Expanded Activity Modal -->
-    <x-slide-over wire:model="isExpandedActivity" id="expandedActivity" title="{{ __('Barcha Faoliyatlar') }}" maxWidth="4xl">
+    <x-slide-over wire:model="isExpandedActivity" id="expandedActivity" :title="__('Barcha Faoliyatlar')" maxWidth="4xl">
         <x-slot:actions>
             <button wire:click="collapseActivity" class="px-5 py-2 bg-dark-surface hover:bg-white/5 border border-dark-border text-white text-sm font-semibold rounded-lg transition-colors">
                 {{ __('Yopish') }}
@@ -158,7 +158,7 @@
     </x-slide-over>
 
     <!-- Expanded History Modal -->
-    <x-slide-over wire:model="isExpandedHistory" id="expandedHistory" title="{{ __('Barcha O\'zgarishlar Tarixi') }}" maxWidth="5xl">
+    <x-slide-over wire:model="isExpandedHistory" id="expandedHistory" :title="__('Barcha O\'zgarishlar Tarixi')" maxWidth="5xl">
         <x-slot:actions>
             <button wire:click="collapseHistory" class="px-5 py-2 bg-dark-surface hover:bg-white/5 border border-dark-border text-white text-sm font-semibold rounded-lg transition-colors">
                 {{ __('Yopish') }}

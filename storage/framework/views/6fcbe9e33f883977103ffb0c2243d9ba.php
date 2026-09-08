@@ -208,7 +208,9 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-right">
+                                    <?php if (app(\Illuminate\Contracts\Auth\Access\Gate::class)->check('delete_task')): ?>
                                         <button wire:click="deleteTask(<?php echo e($task->id); ?>)" class="text-red-400 hover:text-red-300 font-medium">O'chirish</button>
+                                    <?php endif; ?>
                                     </td>
                                 </tr>
                             <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
@@ -225,14 +227,14 @@
         <!-- Create Task Slide-Over -->
         <?php if (isset($component)) { $__componentOriginal6ef8dd008d82ca426db4c565227b1725 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal6ef8dd008d82ca426db4c565227b1725 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isCreatingTask','id' => 'createTaskPanel','title' => ''.e(__('Yangi vazifa qo\'shish')).'','maxWidth' => '6xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isCreatingTask','id' => 'createTaskPanel','title' => __('Yangi vazifa qo\'shish'),'maxWidth' => '6xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('slide-over'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model' => 'isCreatingTask','id' => 'createTaskPanel','title' => ''.e(__('Yangi vazifa qo\'shish')).'','maxWidth' => '6xl']); ?>
+<?php $component->withAttributes(['wire:model' => 'isCreatingTask','id' => 'createTaskPanel','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Yangi vazifa qo\'shish')),'maxWidth' => '6xl']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
              <?php $__env->slot('actions', null, []); ?> 
@@ -308,12 +310,18 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                     
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-white/60 mb-2"><?php echo e(__('Kimga yuborish?')); ?></label>
-                            <select wire:model.live="newTaskAssignType" class="w-full bg-black/40 border border-dark-border rounded-xl px-4 py-2 text-white text-sm focus:border-accent outline-none">
-                                <option value="user"><?php echo e(__('Muayyan xodim(lar)')); ?></option>
-                                <option value="team"><?php echo e(__('Muayyan jamoa(lar)')); ?></option>
-                                <option value="everyone"><?php echo e(__('Barcha xodimlar')); ?></option>
-                            </select>
+                            <!-- Custom Select for Task Assign Type -->
+                            <div x-data="{ open: false, selected: <?php if ((object) ('newTaskAssignType') instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('newTaskAssignType'->value()); ?>')<?php echo e('newTaskAssignType'->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('newTaskAssignType'); ?>')<?php endif; ?>.live }" class="relative">
+                                <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-black/40 border border-dark-border rounded-xl px-4 py-3 text-white text-sm focus:border-accent outline-none">
+                                    <span x-text="selected === 'user' ? '<?php echo e(__('Xodimlarni tanlash')); ?>' : (selected === 'team' ? '<?php echo e(__('Jamoalarni tanlash')); ?>' : '<?php echo e(__('Barchaga ko\'rinadigan qilib')); ?>')"></span>
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div x-show="open" x-transition class="absolute z-[100] w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
+                                    <div @click="selected = 'user'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors"><?php echo e(__('Xodimlarni tanlash')); ?></div>
+                                    <div @click="selected = 'team'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors"><?php echo e(__('Jamoalarni tanlash')); ?></div>
+                                    <div @click="selected = 'everyone'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors"><?php echo e(__('Barchaga ko\'rinadigan qilib')); ?></div>
+                                </div>
+                            </div>
                         </div>
 
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($newTaskAssignType === 'user'): ?>
@@ -489,6 +497,99 @@ unset($__split);
 <?php $component = $__componentOriginal6ef8dd008d82ca426db4c565227b1725; ?>
 <?php unset($__componentOriginal6ef8dd008d82ca426db4c565227b1725); ?>
 <?php endif; ?>
+
+        <!-- View Task Slide-Over -->
+        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($selectedTask): ?>
+        <?php if (isset($component)) { $__componentOriginal6ef8dd008d82ca426db4c565227b1725 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal6ef8dd008d82ca426db4c565227b1725 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isViewingTask','id' => 'viewTaskPanel','title' => __('Vazifa Tafsilotlari'),'maxWidth' => '3xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('slide-over'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['wire:model' => 'isViewingTask','id' => 'viewTaskPanel','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Vazifa Tafsilotlari')),'maxWidth' => '3xl']); ?>
+<?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
+
+             <?php $__env->slot('actions', null, []); ?> 
+                <button wire:click="closeTaskView" class="px-5 py-2 bg-dark-surface hover:bg-white/5 border border-dark-border text-white text-sm font-semibold rounded-lg transition-colors">
+                    <?php echo e(__('Yopish')); ?>
+
+                </button>
+             <?php $__env->endSlot(); ?>
+
+            <div class="p-6 space-y-8">
+                <!-- Header -->
+                <div class="bg-black/20 border border-dark-border rounded-3xl p-6 relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-accent/20 rounded-full blur-[50px] pointer-events-none"></div>
+                    
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-2xl font-bold text-white"><?php echo e($selectedTask->title); ?></h2>
+                        <span class="px-3 py-1 text-xs font-bold uppercase rounded border
+                            <?php if($selectedTask->priority == 'high'): ?> bg-red-500/10 text-red-400 border-red-500/20
+                            <?php elseif($selectedTask->priority == 'medium'): ?> bg-amber-500/10 text-amber-400 border-amber-500/20
+                            <?php else: ?> bg-emerald-500/10 text-emerald-400 border-emerald-500/20 <?php endif; ?>">
+                            <?php echo e($selectedTask->priority); ?>
+
+                        </span>
+                    </div>
+
+                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($selectedTask->description): ?>
+                        <p class="text-sm text-gray-300 mt-4 whitespace-pre-line"><?php echo e($selectedTask->description); ?></p>
+                    <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+                        <div>
+                            <p class="text-xs text-dark-muted font-semibold uppercase mb-1"><?php echo e(__('Boshlanish')); ?></p>
+                            <p class="text-white font-medium"><?php echo e($selectedTask->start_date ? \Carbon\Carbon::parse($selectedTask->start_date)->format('d.m.Y H:i') : '-'); ?></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-dark-muted font-semibold uppercase mb-1"><?php echo e(__('Muddat')); ?></p>
+                            <p class="text-white font-medium <?php echo e(\Carbon\Carbon::parse($selectedTask->due_date)->isPast() ? 'text-red-400' : ''); ?>"><?php echo e($selectedTask->due_date ? \Carbon\Carbon::parse($selectedTask->due_date)->format('d.m.Y H:i') : __('Muddatsiz')); ?></p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-dark-muted font-semibold uppercase mb-1"><?php echo e(__('Holati')); ?></p>
+                            <p class="text-white font-medium capitalize"><?php echo e($selectedTask->status); ?></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deal Info Section -->
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($selectedTask->deal): ?>
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+                        <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span><?php echo e(__('Biriktirilgan Bitim (Deal)')); ?></span>
+                    </h3>
+                    <a href="<?php echo e(route('crm.deals', ['pipelineId' => $selectedTask->deal->pipeline_id, 'highlightDeal' => $selectedTask->deal->id])); ?>" class="block bg-white/5 hover:bg-white/10 transition-colors border border-white/10 rounded-xl p-5 group cursor-pointer">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-lg font-bold text-white group-hover:text-accent transition-colors"><?php echo e($selectedTask->deal->title); ?></h4>
+                                <div class="flex items-center space-x-4 mt-2">
+                                    <span class="text-sm font-semibold text-accent">$ <?php echo e(number_format($selectedTask->deal->amount, 0, ',', ' ')); ?></span>
+                                    <span class="text-xs text-gray-400 capitalize"><?php echo e($selectedTask->deal->deal_type); ?></span>
+                                    <span class="text-xs text-gray-400"><?php echo e($selectedTask->deal->start_date ? \Carbon\Carbon::parse($selectedTask->deal->start_date)->format('d.m.Y') : ''); ?></span>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-500 group-hover:text-white transition-colors transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                    </a>
+                </div>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                
+            </div>
+         <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal6ef8dd008d82ca426db4c565227b1725)): ?>
+<?php $attributes = $__attributesOriginal6ef8dd008d82ca426db4c565227b1725; ?>
+<?php unset($__attributesOriginal6ef8dd008d82ca426db4c565227b1725); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal6ef8dd008d82ca426db4c565227b1725)): ?>
+<?php $component = $__componentOriginal6ef8dd008d82ca426db4c565227b1725; ?>
+<?php unset($__componentOriginal6ef8dd008d82ca426db4c565227b1725); ?>
+<?php endif; ?>
+        <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
     </div>
 </div>
 <?php /**PATH /var/www/resources/views/livewire/task-kanban-board.blade.php ENDPATH**/ ?>

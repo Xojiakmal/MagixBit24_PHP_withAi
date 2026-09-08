@@ -131,14 +131,14 @@
     <!-- Expanded Activity Modal -->
     <?php if (isset($component)) { $__componentOriginal6ef8dd008d82ca426db4c565227b1725 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal6ef8dd008d82ca426db4c565227b1725 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isExpandedActivity','id' => 'expandedActivity','title' => ''.e(__('Barcha Faoliyatlar')).'','maxWidth' => '4xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isExpandedActivity','id' => 'expandedActivity','title' => __('Barcha Faoliyatlar'),'maxWidth' => '4xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('slide-over'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model' => 'isExpandedActivity','id' => 'expandedActivity','title' => ''.e(__('Barcha Faoliyatlar')).'','maxWidth' => '4xl']); ?>
+<?php $component->withAttributes(['wire:model' => 'isExpandedActivity','id' => 'expandedActivity','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Barcha Faoliyatlar')),'maxWidth' => '4xl']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
          <?php $__env->slot('actions', null, []); ?> 
@@ -194,14 +194,14 @@
     <!-- Expanded History Modal -->
     <?php if (isset($component)) { $__componentOriginal6ef8dd008d82ca426db4c565227b1725 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal6ef8dd008d82ca426db4c565227b1725 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isExpandedHistory','id' => 'expandedHistory','title' => ''.e(__('Barcha O\'zgarishlar Tarixi')).'','maxWidth' => '5xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isExpandedHistory','id' => 'expandedHistory','title' => __('Barcha O\'zgarishlar Tarixi'),'maxWidth' => '5xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('slide-over'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model' => 'isExpandedHistory','id' => 'expandedHistory','title' => ''.e(__('Barcha O\'zgarishlar Tarixi')).'','maxWidth' => '5xl']); ?>
+<?php $component->withAttributes(['wire:model' => 'isExpandedHistory','id' => 'expandedHistory','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Barcha O\'zgarishlar Tarixi')),'maxWidth' => '5xl']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
          <?php $__env->slot('actions', null, []); ?> 

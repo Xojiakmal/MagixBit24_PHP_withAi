@@ -41,6 +41,9 @@ class TaskKanbanBoard extends Component
     public $listTasks = [];
 
     public $isCreatingTask = false;
+    public $isViewingTask = false;
+    public $selectedTask = null;
+
     public $newTaskTitle = '';
     public $newTaskDescription = '';
     public $newTaskPriority = 'medium';
@@ -237,8 +240,25 @@ class TaskKanbanBoard extends Component
 
     public function deleteTask($taskId)
     {
+        if (!auth()->user()->can('delete_task') && !auth()->user()->hasRole('Admin')) {
+            abort(403, 'Sizda vazifalarni o\'chirish huquqi yo\'q.');
+        }
         Task::destroy($taskId);
         $this->loadTasks();
+    }
+
+    public function viewTask($taskId)
+    {
+        $this->selectedTask = Task::with('deal')->find($taskId);
+        if ($this->selectedTask) {
+            $this->isViewingTask = true;
+        }
+    }
+
+    public function closeTaskView()
+    {
+        $this->isViewingTask = false;
+        $this->selectedTask = null;
     }
 
     public function render()

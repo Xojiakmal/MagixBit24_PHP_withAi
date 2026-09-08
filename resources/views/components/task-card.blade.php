@@ -1,6 +1,6 @@
 @props(['task'])
 
-<div class="bg-slate-800/60 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-dark-border cursor-move hover:border-accent hover:shadow-[0_0_15px_rgba(155,114,255,0.2)] transition-all duration-300 group relative overflow-hidden"
+<div wire:click="viewTask({{ $task->id }})" class="bg-slate-800/60 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-dark-border cursor-pointer hover:border-accent hover:shadow-[0_0_15px_rgba(155,114,255,0.2)] transition-all duration-300 group relative overflow-hidden"
      draggable="true"
      @dragstart="event.dataTransfer.setData('task_id', {{ $task->id }})">
      
@@ -8,7 +8,7 @@
     <div class="absolute -top-10 -right-10 w-32 h-32 bg-accent/20 rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity"></div>
      
     <!-- Delete Button (Visible on hover) -->
-    <button wire:click="deleteTask({{ $task->id }})" class="absolute top-4 right-4 text-dark-muted hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
+    <button wire:click.stop="deleteTask({{ $task->id }})" class="absolute top-4 right-4 text-dark-muted hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
     </button>
 

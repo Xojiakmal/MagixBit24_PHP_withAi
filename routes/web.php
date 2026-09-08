@@ -99,11 +99,13 @@ $mainGroup = function () {
         $permissions = [
             'view_dashboard', 'view_crm', 'create_deal', 'comment_deal', 'assign_deal',
             'view_tasks', 'create_task', 'edit_task', 'delete_task',
-            'view_storage', 'manage_storage', 'manage_employees'
+            'view_storage', 'manage_storage', 'view_employees', 'manage_employees', 'view_contacts', 'manage_contacts'
         ];
         foreach ($permissions as $p) {
             \Spatie\Permission\Models\Permission::findOrCreate($p, 'web');
         }
+        $admin = \Spatie\Permission\Models\Role::findOrCreate('Admin', 'web');
+        $admin->givePermissionTo($permissions);
         return 'Permissions seeded.';
     });
 
@@ -119,22 +121,28 @@ $mainGroup = function () {
                     return redirect()->route('projects.tasks');
                 } elseif ($user->can('view_storage')) {
                     return redirect()->route('storage.index');
-                } elseif ($user->can('manage_employees')) {
+                } elseif ($user->can('view_employees')) {
                     return redirect()->route('roles.index');
                 }
             }
 
-            $totalRevenue = \App\Models\Deal::sum('amount');
-            $completedTasks = \App\Models\Task::where('status', 'done')->count();
+            $inProgressRevenue = \App\Models\Deal::whereHas('stage', function($q) {
+                $q->whereNotIn('name', ['Yopilgan', 'Bekor qilingan']);
+            })->sum('amount');
+            
+            $closedRevenue = \App\Models\Deal::whereHas('stage', function($q) {
+                $q->where('name', 'Yopilgan');
+            })->sum('amount');
+            
             $newClients = \App\Models\Contact::count();
 
-            return view('dashboard', compact('totalRevenue', 'completedTasks', 'newClients'));
+            return view('dashboard', compact('inProgressRevenue', 'closedRevenue', 'newClients'));
         })->name('dashboard');
 
         Route::get('/profile', App\Livewire\ProfileSettings::class)->name('profile');
-        Route::get('/contacts', \App\Livewire\ContactManager::class)->name('contacts');
-        Route::get('/employees', \App\Livewire\EmployeeManager::class)->name('employees')->middleware('can:manage_employees');
-        Route::get('/company/employees', App\Livewire\EmployeeManager::class)->name('roles.index')->middleware('can:manage_employees');
+        Route::get('/contacts', \App\Livewire\ContactManager::class)->name('contacts')->middleware('can:view_contacts');
+        Route::get('/employees', \App\Livewire\EmployeeManager::class)->name('employees')->middleware('can:view_employees');
+        Route::get('/company/employees', App\Livewire\EmployeeManager::class)->name('roles.index')->middleware('can:view_employees');
         Route::get('/crm/deals', App\Livewire\DealKanbanBoard::class)->name('crm.deals')->middleware('can:view_crm');
         Route::get('/projects/tasks', App\Livewire\TaskKanbanBoard::class)->name('projects.tasks')->middleware('can:view_tasks');
         

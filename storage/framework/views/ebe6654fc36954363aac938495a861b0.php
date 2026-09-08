@@ -51,7 +51,7 @@
                 <div class="px-5 py-4 border-b border-dark-border/50 bg-slate-900/60 rounded-t-3xl flex justify-between items-center">
                     <h3 class="text-sm font-bold text-white tracking-wider flex items-center">
                         <span class="w-2.5 h-2.5 rounded-full mr-2 bg-accent shadow-[0_0_8px_rgba(155,114,255,0.8)]"></span>
-                        <?php echo e($stage->name); ?>
+                        <?php echo e(__($stage->name)); ?>
 
                     </h3>
                     <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-dark-surface border border-dark-border text-dark-text">
@@ -61,7 +61,7 @@
                 
                 <div class="p-4 flex-1 space-y-4 overflow-y-auto min-h-[500px]">
                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $deals[$stage->id] ?? []; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $deal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                    <div class="bg-slate-800/60 backdrop-blur-md p-5 rounded-2xl shadow-sm border border-dark-border cursor-pointer hover:border-accent hover:shadow-[0_0_15px_rgba(155,114,255,0.2)] transition-all duration-300 group relative overflow-hidden"
+                    <div class="bg-slate-800/60 backdrop-blur-md p-5 rounded-2xl shadow-sm border cursor-pointer transition-all duration-300 group relative overflow-hidden <?php echo e($highlightDeal == $deal->id ? 'border-accent shadow-[0_0_20px_rgba(155,114,255,0.5)] ring-2 ring-accent' : 'border-dark-border hover:border-accent hover:shadow-[0_0_15px_rgba(155,114,255,0.2)]'); ?>"
                          draggable="true"
                          @dragstart="event.dataTransfer.setData('deal_id', <?php echo e($deal->id); ?>)"
                          wire:click="viewDeal(<?php echo e($deal->id); ?>)">
@@ -69,12 +69,7 @@
                         <!-- Glassmorphism decorations -->
                         <div class="absolute -top-10 -right-10 w-32 h-32 bg-accent/20 rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity"></div>
                          
-                        <!-- Delete Button (Visible on hover) -->
-                        <button wire:click="deleteDeal(<?php echo e($deal->id); ?>)" class="absolute top-4 right-4 text-dark-muted hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                        </button>
-
-                        <div class="font-semibold text-white pr-6 text-lg"><?php echo e($deal->title); ?></div>
+                        <div class="font-semibold text-white pr-6 text-lg"><?php echo e($deal->id); ?># <?php echo e($deal->title); ?></div>
                         <div class="text-sm font-bold text-accent mt-2">$ <?php echo e(number_format($deal->amount, 0, ',', ' ')); ?></div>
                         
                         <?php
@@ -134,13 +129,14 @@
                     </thead>
                     <tbody class="divide-y divide-dark-border/50">
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__empty_1 = true; $__currentLoopData = $listDeals; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $deal): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                            <tr class="hover:bg-white/5 transition-colors group">
+                            <tr class="transition-colors group <?php echo e($highlightDeal == $deal->id ? 'bg-accent/10 hover:bg-accent/20 relative z-10' : 'hover:bg-white/5'); ?>"
+                                style="<?php echo e($highlightDeal == $deal->id ? 'box-shadow: inset 0 0 15px rgba(155,114,255,0.2);' : ''); ?>">
                                 <td class="px-6 py-4">
-                                    <div class="font-semibold text-white"><?php echo e($deal->title); ?></div>
+                                    <div class="font-semibold text-white"><?php echo e($deal->id); ?># <?php echo e($deal->title); ?></div>
                                 </td>
                                 <td class="px-6 py-4">
                                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-dark-surface border border-dark-border text-dark-text">
-                                        <?php echo e($deal->stage->name ?? '-'); ?>
+                                        <?php echo e($deal->stage ? __($deal->stage->name) : '-'); ?>
 
                                     </span>
                                 </td>
@@ -209,7 +205,7 @@
                             <?php elseif($key == 'idle'): ?> bg-gray-500 shadow-[0_0_8px_rgba(107,114,128,0.8)]
                             <?php else: ?> bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.8)] <?php endif; ?>
                         "></span>
-                        <?php echo e($col['title']); ?>
+                        <?php echo e(__($col['title'])); ?>
 
                     </h3>
                     <span class="inline-flex items-center justify-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-dark-surface border border-dark-border text-dark-text">
@@ -224,7 +220,7 @@
                         <!-- Glassmorphism decorations -->
                         <div class="absolute -top-10 -right-10 w-32 h-32 bg-accent/20 rounded-full blur-[40px] opacity-0 group-hover:opacity-100 transition-opacity"></div>
                         
-                        <div class="font-semibold text-white pr-6 text-base"><?php echo e($deal->title); ?></div>
+                        <div class="font-semibold text-white pr-6 text-base"><?php echo e($deal->id); ?># <?php echo e($deal->title); ?></div>
                         <div class="text-xs font-bold text-accent mt-1">$ <?php echo e(number_format($deal->amount, 0, ',', ' ')); ?></div>
                         
                         <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($deal->contact): ?>
@@ -232,7 +228,7 @@
                         <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         
                         <div class="text-xs text-dark-muted mt-3 pt-3 border-t border-dark-border/50 flex justify-between items-center">
-                            <span class="text-gray-500"><?php echo e($deal->stage->name ?? 'Bosqichsiz'); ?></span>
+                            <span class="text-gray-500"><?php echo e($deal->stage ? __($deal->stage->name) : __('Bosqichsiz')); ?></span>
                             <a href="<?php echo e(route('projects.tasks', ['dealId' => $deal->id])); ?>" class="text-gray-400 hover:text-white flex items-center">
                                 <svg class="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path></svg>
                                 <?php echo e(__('Vazifalar')); ?>
@@ -250,14 +246,14 @@
         <!-- Create Deal Slide-Over -->
         <?php if (isset($component)) { $__componentOriginal6ef8dd008d82ca426db4c565227b1725 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal6ef8dd008d82ca426db4c565227b1725 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isCreatingDeal','id' => 'createDealPanel','title' => ''.e(__('Yangi bitim (Deal) qo\'shish')).'','maxWidth' => '6xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isCreatingDeal','id' => 'createDealPanel','title' => __('Yangi bitim (Deal) qo\'shish'),'maxWidth' => '6xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('slide-over'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model' => 'isCreatingDeal','id' => 'createDealPanel','title' => ''.e(__('Yangi bitim (Deal) qo\'shish')).'','maxWidth' => '6xl']); ?>
+<?php $component->withAttributes(['wire:model' => 'isCreatingDeal','id' => 'createDealPanel','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Yangi bitim (Deal) qo\'shish')),'maxWidth' => '6xl']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
              <?php $__env->slot('actions', null, []); ?> 
@@ -337,9 +333,9 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
 
                     <div class="p-5 bg-white/5 rounded-2xl border border-white/5 space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2"><?php echo e(__('Mas\'ullar (Xodimlar, Rollar, Jamoalar)')); ?></label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2"><?php echo e(Auth::user()->hasRole('Admin') ? __('Mas\'ullar (Xodimlar, Rollar, Jamoalar)') : __('Mas\'ul xodim')); ?></label>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="grid grid-cols-1 <?php echo e(Auth::user()->hasRole('Admin') ? 'md:grid-cols-3' : ''); ?> gap-4">
                                 <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
                                     <h5 class="text-xs font-bold text-gray-400 mb-2"><?php echo e(__('Xodimlar')); ?></h5>
                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $this->allUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
@@ -349,6 +345,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                         </label>
                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                                 </div>
+                                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(Auth::user()->hasRole('Admin')): ?>
                                 <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
                                     <h5 class="text-xs font-bold text-gray-400 mb-2"><?php echo e(__('Rollar')); ?></h5>
                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = \App\Models\Role::whereNotIn('name', ['Admin'])->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $r): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
@@ -367,6 +364,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                         </label>
                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                                 </div>
+                                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                             </div>
                         </div>
                         
@@ -473,16 +471,20 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             </div>
                             <div>
                                 <label class="block text-sm font-medium text-white/60 mb-2"><?php echo e(__('O\'lchov birligi')); ?></label>
-                                <select wire:model="newProductUnit" class="w-full bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
-                                    <option value="dona">dona</option>
-                                    <option value="kg">kg</option>
-                                    <option value="litr">litr</option>
-                                    <option value="sentner">sentner</option>
-                                    <option value="tonna">tonna</option>
-                                    <option value="metr">metr</option>
-                                    <option value="kv.m">kv.m</option>
-                                    <option value="oy">oy</option>
-                                </select>
+                                <!-- Custom Select for Unit -->
+                                <div x-data="{ open: false, selected: <?php if ((object) ('newProductUnit') instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('newProductUnit'->value()); ?>')<?php echo e('newProductUnit'->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('newProductUnit'); ?>')<?php endif; ?>.defer }" class="relative col-span-3">
+                                    <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
+                                        <span x-text="selected === 'dona' ? 'dona' : (selected === 'kg' ? 'kg' : (selected === 'litr' ? 'litr' : (selected === 'metr' ? 'metr' : (selected === 'm2' ? 'm2' : 'Tanlang'))))"></span>
+                                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                    </button>
+                                    <div x-show="open" x-transition class="absolute z-[100] w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
+                                        <div @click="selected = 'dona'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">dona</div>
+                                        <div @click="selected = 'kg'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">kg</div>
+                                        <div @click="selected = 'litr'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">litr</div>
+                                        <div @click="selected = 'metr'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">metr</div>
+                                        <div @click="selected = 'm2'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">m2</div>
+                                    </div>
+                                </div>
                             </div>
                             <button wire:click="createAndAddProduct" class="w-full py-2 bg-accent/20 text-accent border border-accent/50 rounded-lg hover:bg-accent hover:text-white transition-colors text-sm font-medium">
                                 <?php echo e(__('Yaratish va Biriktirish')); ?>
@@ -538,14 +540,14 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($selectedDeal): ?>
     <?php if (isset($component)) { $__componentOriginal6ef8dd008d82ca426db4c565227b1725 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal6ef8dd008d82ca426db4c565227b1725 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isViewingDeal','id' => 'viewDealPanel','title' => ''.e(__('Bitim Tafsilotlari')).'','maxWidth' => '4xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.slide-over','data' => ['wire:model' => 'isViewingDeal','id' => 'viewDealPanel','title' => __('Bitim Tafsilotlari'),'maxWidth' => '4xl']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('slide-over'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['wire:model' => 'isViewingDeal','id' => 'viewDealPanel','title' => ''.e(__('Bitim Tafsilotlari')).'','maxWidth' => '4xl']); ?>
+<?php $component->withAttributes(['wire:model' => 'isViewingDeal','id' => 'viewDealPanel','title' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute(__('Bitim Tafsilotlari')),'maxWidth' => '4xl']); ?>
 <?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::processComponentKey($component); ?>
 
          <?php $__env->slot('actions', null, []); ?> 
@@ -567,8 +569,8 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                 <h2 class="text-3xl font-bold text-white mb-2"><?php echo e($selectedDeal->title); ?></h2>
                 <div class="flex items-center space-x-4">
                     <span class="text-2xl font-black text-accent">$ <?php echo e(number_format($selectedDeal->amount, 0, ',', ' ')); ?></span>
-                    <span class="px-3 py-1 bg-white/10 rounded-full text-xs font-semibold text-gray-300 border border-white/10">
-                        <?php echo e($selectedDeal->stage->name ?? 'Noma\'lum'); ?>
+                    <span class="px-3 py-1 bg-accent/20 text-accent text-sm font-bold rounded-lg border border-accent/30 shadow-[0_0_10px_rgba(155,114,255,0.2)]">
+                        <?php echo e($selectedDeal->stage ? __($selectedDeal->stage->name) : __('Noma\'lum')); ?>
 
                     </span>
                 </div>
@@ -607,7 +609,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             $wire.updateDealAssignments(<?php echo e($selectedDeal->id); ?>, this.users, this.roles, this.teams);
                         }
                     }">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="grid grid-cols-1 <?php echo e(Auth::user()->hasRole('Admin') ? 'md:grid-cols-3' : ''); ?> gap-4">
                             <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
                                 <h5 class="text-xs font-bold text-gray-400 mb-2"><?php echo e(__('Xodimlar')); ?></h5>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $this->allUsers; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $u): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
@@ -617,6 +619,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                     </label>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                             </div>
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if(Auth::user()->hasRole('Admin')): ?>
                             <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
                                 <h5 class="text-xs font-bold text-gray-400 mb-2"><?php echo e(__('Rollar')); ?></h5>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = \App\Models\Role::whereNotIn('name', ['Admin'])->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $r): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
@@ -635,6 +638,7 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                                     </label>
                                 <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                             </div>
+                            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                         </div>
                     </div>
                 <?php else: ?>
@@ -656,15 +660,15 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
             <!-- Details Section -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                    <h3 class="text-lg font-bold text-white mb-4">Qo'shimcha ma'lumotlar</h3>
+                    <h3 class="text-lg font-bold text-white mb-4"><?php echo e(__('Qo\'shimcha ma\'lumotlar')); ?></h3>
                     <div class="bg-black/20 border border-dark-border rounded-xl p-5 space-y-4">
                         <div>
-                            <span class="text-xs text-dark-muted uppercase font-bold">Bitim turi</span>
-                            <p class="text-white mt-1 capitalize"><?php echo e($selectedDeal->deal_type); ?></p>
+                            <span class="text-xs text-dark-muted uppercase font-bold"><?php echo e(__('Bitim turi')); ?></span>
+                            <p class="text-white mt-1 capitalize"><?php echo e(__($selectedDeal->deal_type)); ?></p>
                         </div>
                         <div>
-                            <span class="text-xs text-dark-muted uppercase font-bold">Manba (Source)</span>
-                            <p class="text-white mt-1 capitalize"><?php echo e($selectedDeal->source); ?></p>
+                            <span class="text-xs text-dark-muted uppercase font-bold"><?php echo e(__('Manba (Source)')); ?></span>
+                            <p class="text-white mt-1 capitalize"><?php echo e(__($selectedDeal->source)); ?></p>
                         </div>
                         <div>
                             <span class="text-xs text-dark-muted uppercase font-bold"><?php echo e(__('Tafsilotlar')); ?></span>
@@ -680,30 +684,109 @@ unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendB
                             <table class="w-full text-left text-sm text-gray-300">
                                 <thead class="bg-black/40 text-xs text-gray-400">
                                     <tr>
-                                        <th class="px-4 py-3 font-semibold"><?php echo e(__('Nomi')); ?></th>
-                                        <th class="px-4 py-3 font-semibold text-center"><?php echo e(__('Miqdori')); ?></th>
-                                        <th class="px-4 py-3 font-semibold text-right"><?php echo e(__('Narxi')); ?></th>
+                                        <th class="px-4 py-3"><?php echo e(__('Nomi')); ?></th>
+                                        <th class="px-4 py-3 text-center"><?php echo e(__('Soni')); ?></th>
+                                        <th class="px-4 py-3 text-right"><?php echo e(__('Narxi')); ?></th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-dark-border/50">
-                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $selectedDeal->products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
-                                        <tr>
-                                            <td class="px-4 py-3"><?php echo e($product->name); ?></td>
-                                            <td class="px-4 py-3 text-center"><?php echo e($product->pivot->quantity); ?> <?php echo e($product->unit); ?></td>
-                                            <td class="px-4 py-3 text-right text-accent font-semibold">$<?php echo e(number_format($product->price, 0, ',', ' ')); ?></td>
-                                        </tr>
+                                <tbody class="divide-y divide-white/5">
+                                    <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $selectedDeal->products; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                                    <tr class="hover:bg-white/5 transition-colors">
+                                        <td class="px-4 py-3"><?php echo e($p->name); ?></td>
+                                        <td class="px-4 py-3 text-center"><?php echo e($p->pivot->quantity); ?> <?php echo e($p->unit); ?></td>
+                                        <td class="px-4 py-3 text-right font-medium text-white">$ <?php echo e(number_format($p->pivot->price * $p->pivot->quantity, 0, ',', ' ')); ?></td>
+                                    </tr>
                                     <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
                     <?php else: ?>
-                        <div class="bg-white/5 border border-dashed border-white/10 rounded-xl p-6 text-center text-gray-400 text-sm">
-                            <?php echo e(__('Mahsulotlar qo\'shilmagan')); ?>
-
+                        <div class="bg-black/20 border border-dark-border rounded-xl p-8 text-center border-dashed">
+                            <p class="text-gray-400 text-sm"><?php echo e(__('Mahsulotlar biriktirilmagan')); ?></p>
                         </div>
                     <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
                 </div>
             </div>
+
+            <!-- Quick Task Creation Section -->
+            <?php
+                $hasTaskAccess = in_array(auth()->id(), $selectedDeal->assigned_users ?? []) 
+                    || auth()->user()->hasRole('Admin') 
+                    || auth()->user()->can('assign_deal') 
+                    || auth()->user()->managerOf;
+            ?>
+
+            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($hasTaskAccess): ?>
+            <div class="pt-6 border-t border-white/5 mt-8">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold text-white"><?php echo e(__('Tezkor Vazifa (Task) Qo\'shish')); ?></h3>
+                    <span class="text-xs text-gray-400"><?php echo e(__('Joriy bitimga avtomatik biriktiriladi')); ?></span>
+                </div>
+                
+                <div class="bg-black/20 border border-dark-border rounded-xl p-5 space-y-4">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <input type="text" wire:model="quickTaskTitle" placeholder="<?php echo e(__('Vazifa nomi (Majburiy)')); ?>" class="w-full bg-black/40 border border-dark-border rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent outline-none focus:ring-1 focus:ring-accent transition-all">
+                            <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php $__errorArgs = ['quickTaskTitle'];
+$__bag = $errors->getBag($__errorArgs[1] ?? 'default');
+if ($__bag->has($__errorArgs[0])) :
+if (isset($message)) { $__messageOriginal = $message; }
+$message = $__bag->first($__errorArgs[0]); ?> <span class="text-red-400 text-xs mt-1 block"><?php echo e($message); ?></span> <?php unset($message);
+if (isset($__messageOriginal)) { $message = $__messageOriginal; }
+endif;
+unset($__errorArgs, $__bag); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+                        </div>
+                        <div class="flex space-x-3">
+                            <input type="date" wire:model="quickTaskDueDate" class="w-full bg-black/40 border border-dark-border rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent outline-none focus:ring-1 focus:ring-accent transition-all" title="<?php echo e(__('Muddat (ixtiyoriy)')); ?>">
+                            <!-- Custom Select for Priority -->
+                            <div x-data="{ open: false, selected: <?php if ((object) ('quickTaskPriority') instanceof \Livewire\WireDirective) : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('quickTaskPriority'->value()); ?>')<?php echo e('quickTaskPriority'->hasModifier('live') ? '.live' : ''); ?><?php else : ?>window.Livewire.find('<?php echo e($__livewire->getId()); ?>').entangle('<?php echo e('quickTaskPriority'); ?>')<?php endif; ?>.defer }" class="relative w-full">
+                                <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-black/40 border border-dark-border rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent outline-none transition-all">
+                                    <span x-text="selected === 'low' ? '<?php echo e(__('Past (Low)')); ?>' : (selected === 'medium' ? '<?php echo e(__('O\'rta (Medium)')); ?>' : (selected === 'high' ? '<?php echo e(__('Yuqori (High)')); ?>' : '<?php echo e(__('Tanlang')); ?>'))"></span>
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div x-show="open" x-transition class="absolute z-[100] w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
+                                    <div @click="selected = 'low'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors"><?php echo e(__('Past (Low)')); ?></div>
+                                    <div @click="selected = 'medium'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors"><?php echo e(__('O\'rta (Medium)')); ?></div>
+                                    <div @click="selected = 'high'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors"><?php echo e(__('Yuqori (High)')); ?></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <textarea wire:model="quickTaskDescription" rows="2" placeholder="<?php echo e(__('Batafsil ma\'lumot (ixtiyoriy)...')); ?>" class="w-full bg-black/40 border border-dark-border rounded-lg px-4 py-2 text-white text-sm focus:border-accent outline-none focus:ring-1 focus:ring-accent transition-all custom-scrollbar"></textarea>
+                    </div>
+
+                    <div class="flex justify-end pt-2">
+                        <button wire:click="saveQuickTask" class="px-6 py-2.5 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-lg transition-colors shadow-[0_0_15px_rgba(155,114,255,0.3)] flex items-center space-x-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            <span><?php echo e(__('Saqlash')); ?></span>
+                        </button>
+                    </div>
+                </div>
+
+                <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php endif; ?><?php if($selectedDeal->tasks->count() > 0): ?>
+                <div class="mt-4">
+                    <h4 class="text-sm font-bold text-gray-300 mb-2"><?php echo e(__('Biriktirilgan Vazifalar')); ?> (<?php echo e($selectedDeal->tasks->count()); ?>)</h4>
+                    <div class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if BLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::openLoop(); ?><?php endif; ?><?php $__currentLoopData = $selectedDeal->tasks->sortByDesc('created_at'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $task): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::startLoopIteration(); ?><?php endif; ?>
+                        <div class="bg-white/5 border border-white/5 rounded-lg p-3 flex justify-between items-center">
+                            <div>
+                                <h5 class="text-sm font-medium text-white"><?php echo e($task->title); ?></h5>
+                                <p class="text-xs text-gray-400 mt-0.5"><?php echo e($task->created_at->format('d.m.Y H:i')); ?> - <?php echo e(__('Holati')); ?>: <span class="text-accent"><?php echo e($task->status); ?></span></p>
+                            </div>
+                            <span class="px-2 py-1 bg-<?php echo e($task->priority === 'high' ? 'red' : ($task->priority === 'low' ? 'blue' : 'amber')); ?>-500/20 text-<?php echo e($task->priority === 'high' ? 'red' : ($task->priority === 'low' ? 'blue' : 'amber')); ?>-400 text-[10px] rounded uppercase font-bold border border-<?php echo e($task->priority === 'high' ? 'red' : ($task->priority === 'low' ? 'blue' : 'amber')); ?>-500/50">
+                                <?php echo e($task->priority); ?>
+
+                            </span>
+                        </div>
+                        <?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::endLoop(); ?><?php endif; ?><?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php \Livewire\Features\SupportCompiledWireKeys\SupportCompiledWireKeys::closeLoop(); ?><?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+            </div>
+            <?php endif; ?><?php if(\Livewire\Mechanisms\ExtendBlade\ExtendBlade::isRenderingLivewireComponent()): ?><!--[if ENDBLOCK]><![endif]--><?php endif; ?>
+
         </div>
      <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>

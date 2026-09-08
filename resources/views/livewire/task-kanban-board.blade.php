@@ -157,7 +157,9 @@
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 text-right">
+                                    @can('delete_task')
                                         <button wire:click="deleteTask({{ $task->id }})" class="text-red-400 hover:text-red-300 font-medium">O'chirish</button>
+                                    @endcan
                                     </td>
                                 </tr>
                             @empty
@@ -172,7 +174,7 @@
         @endif
 
         <!-- Create Task Slide-Over -->
-        <x-slide-over wire:model="isCreatingTask" id="createTaskPanel" title="{{ __('Yangi vazifa qo\'shish') }}" maxWidth="6xl">
+        <x-slide-over wire:model="isCreatingTask" id="createTaskPanel" :title="__('Yangi vazifa qo\'shish')" maxWidth="6xl">
             <x-slot:actions>
                 <button wire:click="saveTask" class="px-5 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-lg transition-colors shadow-[0_0_15px_rgba(155,114,255,0.4)]">
                     {{ __('Saqlash') }}
@@ -238,12 +240,18 @@
                     
                     <div class="space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Kimga yuborish?') }}</label>
-                            <select wire:model.live="newTaskAssignType" class="w-full bg-black/40 border border-dark-border rounded-xl px-4 py-2 text-white text-sm focus:border-accent outline-none">
-                                <option value="user">{{ __('Muayyan xodim(lar)') }}</option>
-                                <option value="team">{{ __('Muayyan jamoa(lar)') }}</option>
-                                <option value="everyone">{{ __('Barcha xodimlar') }}</option>
-                            </select>
+                            <!-- Custom Select for Task Assign Type -->
+                            <div x-data="{ open: false, selected: @entangle('newTaskAssignType').live }" class="relative">
+                                <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-black/40 border border-dark-border rounded-xl px-4 py-3 text-white text-sm focus:border-accent outline-none">
+                                    <span x-text="selected === 'user' ? '{{ __('Xodimlarni tanlash') }}' : (selected === 'team' ? '{{ __('Jamoalarni tanlash') }}' : '{{ __('Barchaga ko\'rinadigan qilib') }}')"></span>
+                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+                                </button>
+                                <div x-show="open" x-transition class="absolute z-[100] w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
+                                    <div @click="selected = 'user'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Xodimlarni tanlash') }}</div>
+                                    <div @click="selected = 'team'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Jamoalarni tanlash') }}</div>
+                                    <div @click="selected = 'everyone'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Barchaga ko\'rinadigan qilib') }}</div>
+                                </div>
+                            </div>
                         </div>
 
                         @if($newTaskAssignType === 'user')
@@ -318,5 +326,76 @@
                 </div>
             </div>
         </x-slide-over>
+
+        <!-- View Task Slide-Over -->
+        @if($selectedTask)
+        <x-slide-over wire:model="isViewingTask" id="viewTaskPanel" :title="__('Vazifa Tafsilotlari')" maxWidth="3xl">
+            <x-slot:actions>
+                <button wire:click="closeTaskView" class="px-5 py-2 bg-dark-surface hover:bg-white/5 border border-dark-border text-white text-sm font-semibold rounded-lg transition-colors">
+                    {{ __('Yopish') }}
+                </button>
+            </x-slot:actions>
+
+            <div class="p-6 space-y-8">
+                <!-- Header -->
+                <div class="bg-black/20 border border-dark-border rounded-3xl p-6 relative overflow-hidden">
+                    <div class="absolute -top-10 -right-10 w-40 h-40 bg-accent/20 rounded-full blur-[50px] pointer-events-none"></div>
+                    
+                    <div class="flex items-center justify-between mb-2">
+                        <h2 class="text-2xl font-bold text-white">{{ $selectedTask->title }}</h2>
+                        <span class="px-3 py-1 text-xs font-bold uppercase rounded border
+                            @if($selectedTask->priority == 'high') bg-red-500/10 text-red-400 border-red-500/20
+                            @elseif($selectedTask->priority == 'medium') bg-amber-500/10 text-amber-400 border-amber-500/20
+                            @else bg-emerald-500/10 text-emerald-400 border-emerald-500/20 @endif">
+                            {{ $selectedTask->priority }}
+                        </span>
+                    </div>
+
+                    @if($selectedTask->description)
+                        <p class="text-sm text-gray-300 mt-4 whitespace-pre-line">{{ $selectedTask->description }}</p>
+                    @endif
+
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
+                        <div>
+                            <p class="text-xs text-dark-muted font-semibold uppercase mb-1">{{ __('Boshlanish') }}</p>
+                            <p class="text-white font-medium">{{ $selectedTask->start_date ? \Carbon\Carbon::parse($selectedTask->start_date)->format('d.m.Y H:i') : '-' }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-dark-muted font-semibold uppercase mb-1">{{ __('Muddat') }}</p>
+                            <p class="text-white font-medium {{ \Carbon\Carbon::parse($selectedTask->due_date)->isPast() ? 'text-red-400' : '' }}">{{ $selectedTask->due_date ? \Carbon\Carbon::parse($selectedTask->due_date)->format('d.m.Y H:i') : __('Muddatsiz') }}</p>
+                        </div>
+                        <div>
+                            <p class="text-xs text-dark-muted font-semibold uppercase mb-1">{{ __('Holati') }}</p>
+                            <p class="text-white font-medium capitalize">{{ $selectedTask->status }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Deal Info Section -->
+                @if($selectedTask->deal)
+                <div>
+                    <h3 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+                        <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                        <span>{{ __('Biriktirilgan Bitim (Deal)') }}</span>
+                    </h3>
+                    <a href="{{ route('crm.deals', ['pipelineId' => $selectedTask->deal->pipeline_id, 'highlightDeal' => $selectedTask->deal->id]) }}" class="block bg-white/5 hover:bg-white/10 transition-colors border border-white/10 rounded-xl p-5 group cursor-pointer">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h4 class="text-lg font-bold text-white group-hover:text-accent transition-colors">{{ $selectedTask->deal->title }}</h4>
+                                <div class="flex items-center space-x-4 mt-2">
+                                    <span class="text-sm font-semibold text-accent">$ {{ number_format($selectedTask->deal->amount, 0, ',', ' ') }}</span>
+                                    <span class="text-xs text-gray-400 capitalize">{{ $selectedTask->deal->deal_type }}</span>
+                                    <span class="text-xs text-gray-400">{{ $selectedTask->deal->start_date ? \Carbon\Carbon::parse($selectedTask->deal->start_date)->format('d.m.Y') : '' }}</span>
+                                </div>
+                            </div>
+                            <svg class="w-5 h-5 text-gray-500 group-hover:text-white transition-colors transform group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                        </div>
+                    </a>
+                </div>
+                @endif
+                
+            </div>
+        </x-slide-over>
+        @endif
     </div>
 </div>

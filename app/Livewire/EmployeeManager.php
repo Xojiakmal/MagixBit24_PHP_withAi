@@ -40,7 +40,12 @@ class EmployeeManager extends Component
             'manage_storage' => 'Omborxonani boshqarish',
         ],
         'Xodimlar' => [
+            'view_employees' => 'Xodimlarni ko\'rish',
             'manage_employees' => 'Xodimlarni boshqarish',
+        ],
+        'Tashqi Mijozlar (Contacts)' => [
+            'view_contacts' => 'Mijozlarni ko\'rish',
+            'manage_contacts' => 'Mijozlarni boshqarish',
         ]
     ];
     
@@ -52,7 +57,8 @@ class EmployeeManager extends Component
         $permissions = [
             'view_dashboard', 'view_crm', 'create_deal', 'comment_deal',
             'view_tasks', 'create_task', 'edit_task', 'delete_task',
-            'view_storage', 'manage_storage', 'manage_employees'
+            'view_storage', 'manage_storage', 'view_employees', 'manage_employees',
+            'view_contacts', 'manage_contacts'
         ];
         foreach ($permissions as $p) {
             \Spatie\Permission\Models\Permission::findOrCreate($p, 'web');
@@ -75,7 +81,10 @@ class EmployeeManager extends Component
     public function saveTeam()
     {
         $this->authorizeAdmin();
-        $this->validate(['teamName' => 'required|string|max:255']);
+        $this->validate([
+            'teamName' => 'required|string|max:255',
+            'teamManagerId' => 'required|exists:users,id'
+        ]);
 
         if ($this->isEditingTeam && $this->teamId) {
             $team = \App\Models\Team::findOrFail($this->teamId);
@@ -133,6 +142,55 @@ class EmployeeManager extends Component
         } else {
             $this->teamMembers[] = $userId;
         }
+    }
+
+    public function getAvailableManagers()
+    {
+        $query = \App\Models\User::whereHas('tenants', fn($q) => $q->where('tenant_users.tenant_id', $this->tenant->id))
+            ->whereDoesntHave('roles', fn($q) => $q->where('name', 'Admin'))
+            ->whereDoesntHave('managerOf', function($q) {
+                if ($this->teamId) {
+                    $q->where('id', '!=', $this->teamId);
+                }
+            })
+            ->where(function($q) {
+                $q->whereNull('team_id');
+                if ($this->teamId) {
+                    $q->orWhere('team_id', $this->teamId);
+                }
+            });
+            
+        return $query->get();
+    }
+
+    public function getAvailableMembers()
+    {
+        $query = \App\Models\User::whereHas('tenants', fn($q) => $q->where('tenant_users.tenant_id', $this->tenant->id))
+            ->whereDoesntHave('roles', fn($q) => $q->where('name', 'Admin'));
+
+        // Exclude users already in another team
+        $query->where(function($q) {
+            $q->whereNull('team_id');
+            if ($this->teamId) {
+                $q->orWhere('team_id', $this->teamId);
+            }
+        });
+
+        // Exclude managers of other teams
+        $query->whereDoesntHave('managerOf', function($q) {
+            if ($this->teamId) {
+                $q->where('id', '!=', $this->teamId);
+            }
+        });
+        
+        $users = $query->get();
+        
+        // Exclude the currently selected manager
+        if ($this->teamManagerId) {
+            $users = $users->reject(fn($u) => $u->id == $this->teamManagerId);
+        }
+        
+        return $users;
     }
 
     // Assign Role to User

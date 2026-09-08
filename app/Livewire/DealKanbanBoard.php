@@ -10,10 +10,15 @@ use App\Models\Product;
 use App\Repositories\Contracts\DealRepositoryInterface;
 use App\Actions\CRM\UpdateDealStageAction;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Url;
 
 class DealKanbanBoard extends Component
 {
     public $pipelineId;
+    
+    #[Url]
+    public $highlightDeal = null;
+
     public $stages = [];
     public $deals = [];
     public $listDeals = [];
@@ -42,6 +47,12 @@ class DealKanbanBoard extends Component
     public $isViewingDeal = false;
     public $selectedDeal = null;
 
+    // Quick Task
+    public $quickTaskTitle = '';
+    public $quickTaskDescription = '';
+    public $quickTaskDueDate = '';
+    public $quickTaskPriority = 'medium';
+
     public $dealProducts = []; // array of ['product_id', 'name', 'price', 'quantity']
     public $productTab = 'select'; // 'select' or 'create'
     public $newProductName = '';
@@ -60,8 +71,18 @@ class DealKanbanBoard extends Component
     #[Computed]
     public function allUsers()
     {
-        // For assigning deals, fetch all users in the tenant
-        return \App\Models\User::where('status', 'active')->get();
+        $user = auth()->user();
+        if ($user->hasRole('Admin')) {
+            return \App\Models\User::where('status', 'active')->get();
+        } elseif ($user->managerOf) {
+            return \App\Models\User::where('status', 'active')
+                ->where(function($q) use ($user) {
+                    $q->where('id', $user->id)
+                      ->orWhere('team_id', $user->managerOf->id);
+                })->get();
+        } else {
+            return \App\Models\User::where('id', $user->id)->get();
+        }
     }
 
     public function addProductFromList($productId)
@@ -342,6 +363,50 @@ class DealKanbanBoard extends Component
         $this->isViewingDeal = false;
         $this->selectedDeal = null;
         $this->loadData(); // refresh in case it was edited
+    }
+
+    public function saveQuickTask(\App\Actions\Project\CreateTaskAction $action)
+    {
+        if (!$this->selectedDeal) return;
+
+        // Check if user is assigned or has manager/admin permissions
+        $assignedUsers = $this->selectedDeal->assigned_users ?? [];
+        $hasAccess = in_array(auth()->id(), $assignedUsers) 
+            || auth()->user()->hasRole('Admin') 
+            || auth()->user()->can('assign_deal') 
+            || auth()->user()->managerOf;
+            
+        if (!$hasAccess) return;
+
+        $this->validate([
+            'quickTaskTitle' => 'required|string|max:255',
+            'quickTaskPriority' => 'required|in:low,medium,high',
+        ], [
+            'quickTaskTitle.required' => __('Vazifa nomi kiritilishi shart.'),
+            'quickTaskPriority.required' => __('Ustuvorlik tanlanishi shart.'),
+        ]);
+
+        $dto = new \App\DTOs\Project\TaskData(
+            title: $this->quickTaskTitle,
+            deal_id: $this->selectedDeal->id,
+            description: $this->quickTaskDescription,
+            status: 'not_planned',
+            priority: $this->quickTaskPriority,
+            start_date: now()->format('Y-m-d H:i:s'),
+            due_date: $this->quickTaskDueDate ?: now()->addDay()->format('Y-m-d H:i:s'),
+            assigned_to: [auth()->id()],
+            assigned_to_department_id: null,
+            assigned_to_everyone: false,
+            created_by: auth()->id(),
+            observers: [],
+            available_to_everyone: false
+        );
+
+        $action->execute($dto);
+        
+        $this->reset(['quickTaskTitle', 'quickTaskDescription', 'quickTaskDueDate']);
+        $this->quickTaskPriority = 'medium';
+        $this->selectedDeal->refresh();
     }
 
     public function updateDealAssignments($dealId, $users, $roles, $teams)
