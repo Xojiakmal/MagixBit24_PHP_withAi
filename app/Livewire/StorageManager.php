@@ -229,10 +229,12 @@ class StorageManager extends Component
     {
         $folders = Folder::where('tenant_id', $this->tenant->id)
                          ->where('parent_id', $this->currentFolderId)
+                         ->latest()
                          ->get();
 
         $files = File::where('tenant_id', $this->tenant->id)
                      ->where('folder_id', $this->currentFolderId)
+                     ->latest()
                      ->get();
 
         return view('livewire.storage-manager', compact('folders', 'files'))

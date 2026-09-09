@@ -37,19 +37,16 @@
         
         <div class="space-y-4 max-h-80 overflow-y-auto custom-scrollbar pr-2">
             @forelse($activities as $activity)
+                @php $details = $this->getActivityDetails($activity); @endphp
                 <div class="flex space-x-3 items-start border-l-2 border-accent/30 pl-4 py-1 relative">
                     <div class="absolute -left-[9px] top-2 w-4 h-4 rounded-full bg-black border-2 border-accent"></div>
-                    <div>
-                        <p class="text-sm text-gray-300">
-                            <strong class="text-white">{{ $activity->user->name ?? __('Tizim') }}</strong> 
-                            @if($activity->action == 'created') {{ __('yaratdi') }}
-                            @elseif($activity->action == 'deleted') {{ __('o\'chirdi') }}
-                            @elseif($activity->action == 'assigned') {{ __('biriktirdi') }}
-                            @elseif($activity->action == 'status_changed') {{ __('holatini o\'zgartirdi') }}
-                            @else {{ __('amalini bajardi') }}
-                            @endif
-                            <span class="text-accent">{{ class_basename($activity->subject_type) }}</span> (ID: {{ $activity->subject_id }})
-                        </p>
+                    <div class="flex-1">
+                        <div class="flex items-start justify-between">
+                            <p class="text-sm text-gray-300 leading-snug">{!! $details['message'] !!}</p>
+                            <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium {{ $details['badgeBg'] }} {{ $details['color'] }} shrink-0">
+                                {{ $details['severity'] }}
+                            </span>
+                        </div>
                         <p class="text-xs text-dark-muted mt-1">{{ $activity->created_at->diffForHumans() }}</p>
                     </div>
                 </div>
@@ -75,44 +72,18 @@
         
         <div class="space-y-4 max-h-80 overflow-y-auto custom-scrollbar pr-2">
             @forelse($history as $hist)
-                <div class="bg-white/5 p-3 rounded-xl border border-white/5">
-                    <div class="flex justify-between mb-2">
-                        <p class="text-sm font-semibold text-white">{{ $hist->user->name ?? __('Tizim') }}</p>
-                        <span class="text-xs text-dark-muted">{{ $hist->created_at->diffForHumans() }}</span>
+                @php $details = $this->getHistoryDetails($hist); @endphp
+                <div class="bg-white/5 p-3 rounded-xl border border-white/5 relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-1 h-full {{ str_replace('text', 'bg', $details['color']) }}"></div>
+                    <div class="flex justify-between items-start mb-2 pl-2">
+                        <div class="flex-1">
+                            <p class="text-sm text-gray-300 leading-snug">{!! $details['message'] !!}</p>
+                        </div>
+                        <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium {{ $details['badgeBg'] }} {{ $details['color'] }} shrink-0">
+                            {{ $details['severity'] }}
+                        </span>
                     </div>
-                    <p class="text-xs text-gray-400 mb-2">
-                        {{ __('Obyekt:') }} <span class="text-blue-400">{{ class_basename($hist->subject_type) }} #{{ $hist->subject_id }}</span>
-                    </p>
-                    <div class="bg-black/30 rounded-lg p-2 text-xs font-mono break-words space-y-1">
-                        @php
-                            $oldVals = is_string($hist->old_values) ? json_decode($hist->old_values, true) : $hist->old_values;
-                            $newVals = is_string($hist->new_values) ? json_decode($hist->new_values, true) : $hist->new_values;
-                            $keys = array_unique(array_merge(array_keys($oldVals ?? []), array_keys($newVals ?? [])));
-                            $changesCount = 0;
-                        @endphp
-                        @foreach($keys as $key)
-                            @if($key === 'updated_at' || $key === 'created_at') @continue @endif
-                            @if($changesCount >= 2)
-                                @php $changesCount++; continue; @endphp
-                            @endif
-                            @php
-                                $oVal = is_array($oldVals[$key] ?? '') ? json_encode($oldVals[$key], JSON_UNESCAPED_UNICODE) : ($oldVals[$key] ?? __('bo\'sh'));
-                                $nVal = is_array($newVals[$key] ?? '') ? json_encode($newVals[$key], JSON_UNESCAPED_UNICODE) : ($newVals[$key] ?? __('bo\'sh'));
-                                $changesCount++;
-                            @endphp
-                            <div class="flex items-center space-x-2 flex-wrap">
-                                <span class="text-gray-400 font-semibold">{{ $key }}:</span>
-                                <span class="text-red-400 line-through">{{ Str::limit((string)$oVal, 20) }}</span>
-                                <svg class="w-3 h-3 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                <span class="text-green-400">{{ Str::limit((string)$nVal, 20) }}</span>
-                            </div>
-                        @endforeach
-                        @if($changesCount > 2)
-                            <div class="text-dark-muted text-[10px] mt-1 italic">+ {{ __('yana') }} {{ $changesCount - 2 }} {{ __('ta o\'zgarish') }}</div>
-                        @elseif($changesCount === 0)
-                            <div class="text-gray-500 text-xs">{{ __('Hech qanday ko\'rsatiladigan o\'zgarish yo\'q') }}</div>
-                        @endif
-                    </div>
+                    <p class="text-xs text-dark-muted mt-1 pl-2">{{ $hist->created_at->diffForHumans() }}</p>
                 </div>
             @empty
                 <p class="text-gray-500 text-sm text-center">{{ __('Tarix bo\'sh.') }}</p>
@@ -132,24 +103,22 @@
         <div class="p-6">
             <div class="space-y-6">
                 @foreach($activities as $activity)
-                    <div class="flex space-x-4 items-start border-b border-dark-border/50 pb-4">
-                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-purple-600 flex items-center justify-center text-white font-bold shrink-0 shadow-lg">
+                    @php $details = $this->getActivityDetails($activity); @endphp
+                    <div class="flex space-x-4 items-start border-b border-dark-border/50 pb-4 relative overflow-hidden">
+                        <div class="absolute top-0 left-0 w-1 h-full {{ str_replace('text', 'bg', $details['color']) }}"></div>
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent to-purple-600 flex items-center justify-center text-white font-bold shrink-0 shadow-lg ml-2">
                             {{ substr($activity->user->name ?? 'T', 0, 1) }}
                         </div>
-                        <div class="flex-1">
-                            <div class="flex justify-between">
-                                <p class="text-base text-gray-200">
-                                    <strong class="text-white">{{ $activity->user->name ?? __('Tizim') }}</strong> 
-                                    @if($activity->action == 'created') {{ __('yangi ma\'lumot yaratdi') }}
-                                    @elseif($activity->action == 'deleted') {{ __('ma\'lumotni o\'chirdi') }}
-                                    @elseif($activity->action == 'assigned') {{ __('xodim biriktirdi') }}
-                                    @elseif($activity->action == 'status_changed') {{ __('holatini o\'zgartirdi') }}
-                                    @else {{ __('amalini bajardi') }}
-                                    @endif
+                        <div class="flex-1 pr-2">
+                            <div class="flex justify-between items-start">
+                                <p class="text-base text-gray-200 leading-snug">
+                                    {!! $details['message'] !!}
                                 </p>
-                                <span class="text-xs text-dark-muted font-mono bg-white/5 px-2 py-1 rounded">{{ $activity->created_at->format('d.m.Y H:i:s') }}</span>
+                                <span class="ml-4 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $details['badgeBg'] }} {{ $details['color'] }} shrink-0">
+                                    {{ $details['severity'] }}
+                                </span>
                             </div>
-                            <p class="text-sm text-accent mt-1">{{ __('Obyekt turi:') }} {{ class_basename($activity->subject_type) }} | {{ __('Obyekt ID:') }} {{ $activity->subject_id }}</p>
+                            <span class="text-xs text-dark-muted font-mono mt-2 block">{{ $activity->created_at->format('d.m.Y H:i:s') }}</span>
                         </div>
                     </div>
                 @endforeach
@@ -173,13 +142,15 @@
                             <th class="px-6 py-4 font-semibold w-1/6">{{ __('Sana va Vaqt') }}</th>
                             <th class="px-6 py-4 font-semibold w-1/6">{{ __('Xodim') }}</th>
                             <th class="px-6 py-4 font-semibold w-1/6">{{ __('Obyekt') }}</th>
-                            <th class="px-6 py-4 font-semibold w-1/2">{{ __('O\'zgarishlar (Eski -> Yangi)') }}</th>
+                            <th class="px-6 py-4 font-semibold w-1/2">{{ __('O\'zgarishlar') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-dark-border/50">
                         @foreach($history as $hist)
-                            <tr class="hover:bg-white/5 transition-colors">
-                                <td class="px-6 py-4 text-xs font-mono text-dark-muted">
+                            @php $details = $this->getHistoryDetails($hist); @endphp
+                            <tr class="hover:bg-white/5 transition-colors relative">
+                                <td class="px-6 py-4 text-xs font-mono text-dark-muted relative">
+                                    <div class="absolute top-0 left-0 w-1 h-full {{ str_replace('text', 'bg', $details['color']) }}"></div>
                                     {{ $hist->created_at->format('d.m.Y') }}<br>
                                     <span class="text-white">{{ $hist->created_at->format('H:i:s') }}</span>
                                 </td>
@@ -187,24 +158,14 @@
                                 <td class="px-6 py-4 text-blue-400">
                                     {{ class_basename($hist->subject_type) }} #{{ $hist->subject_id }}
                                 </td>
-                                <td class="px-6 py-4 font-mono text-xs">
-                                    @php
-                                        $oldVals = is_string($hist->old_values) ? json_decode($hist->old_values, true) : $hist->old_values;
-                                        $newVals = is_string($hist->new_values) ? json_decode($hist->new_values, true) : $hist->new_values;
-                                        $keys = array_unique(array_merge(array_keys($oldVals ?? []), array_keys($newVals ?? [])));
-                                    @endphp
-                                    <div class="space-y-2">
-                                        @foreach($keys as $key)
-                                            @if($key === 'updated_at') @continue @endif
-                                            <div class="bg-black/30 p-2 rounded border border-white/5">
-                                                <div class="text-gray-400 font-bold mb-1">{{ $key }}:</div>
-                                                <div class="flex items-center space-x-2 flex-wrap">
-                                                    <span class="text-red-400 bg-red-400/10 px-1 rounded break-all">{{ is_array($oldVals[$key] ?? '') ? json_encode($oldVals[$key]) : ($oldVals[$key] ?? 'null') }}</span>
-                                                    <svg class="w-4 h-4 text-gray-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                                                    <span class="text-green-400 bg-green-400/10 px-1 rounded break-all">{{ is_array($newVals[$key] ?? '') ? json_encode($newVals[$key]) : ($newVals[$key] ?? 'null') }}</span>
-                                                </div>
-                                            </div>
-                                        @endforeach
+                                <td class="px-6 py-4">
+                                    <div class="flex flex-col space-y-2">
+                                        <div class="flex items-center justify-between">
+                                            <p class="text-sm text-gray-300 leading-snug">{!! $details['message'] !!}</p>
+                                            <span class="ml-4 inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium {{ $details['badgeBg'] }} {{ $details['color'] }} shrink-0">
+                                                {{ $details['severity'] }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </td>
                             </tr>

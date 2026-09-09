@@ -23,9 +23,9 @@
                 <div class="bg-black/20 isolate border border-dark-border p-8 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl max-w-3xl">
                     <h3 class="text-xl font-bold text-white mb-4">Storage tizimini sozlash</h3>
                     <div class="text-gray-300 space-y-4 mb-8 text-sm">
-                        <p>Fayllarni markazlashgan holda saqlash uchun Telegram Yopiq Guruhini (Private Group) tizimga ulashingiz kerak:</p>
+                        <p>Fayllarni markazlashgan holda saqlash uchun Telegram Yopiq Guruhini tizimga ulashingiz kerak:</p>
                         <ol class="list-decimal pl-5 space-y-2 text-accent">
-                            <li>Telegramda yangi <b>Yopiq guruh (Private Group)</b> yarating.</li>
+                            <li>Telegramda yangi <b>Yopiq guruh</b> yarating.</li>
                             <li>Tizim botini (<span class="text-white font-mono">{{ "@" }}{{ env('TELEGRAM_BOT_USERNAME', 'WipeBitrixBot') }}</span>) shu guruhga qo'shing.</li>
                             <li>Botga guruhda <b>Admin</b> huquqlarini bering.</li>
                             <li>Guruhga quyidagi maxsus buyruqni yuboring:</li>

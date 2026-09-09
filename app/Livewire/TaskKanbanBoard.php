@@ -107,7 +107,7 @@ class TaskKanbanBoard extends Component
         $repository = app(TaskRepositoryInterface::class);
         
         if ($this->dealId) {
-            $allTasks = Task::where('deal_id', $this->dealId)->get();
+            $allTasks = Task::where('deal_id', $this->dealId)->latest()->get();
         } else {
             $allTasks = $repository->getAllTasks();
         }

@@ -13,7 +13,7 @@
                 
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="text-dark-muted hover:text-white transition-colors">Boshqa akkauntga o'tish (Chiqish)</button>
+                    <button type="submit" class="text-dark-muted hover:text-white transition-colors">Boshqa akkauntga o'tish</button>
                 </form>
             </div>
         </div>

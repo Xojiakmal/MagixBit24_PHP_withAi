@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
         <h2 class="font-bold text-2xl text-white tracking-tight">
-            {{ __('Kompaniya Ombri (Storage)') }}
+            {{ __('Kompaniya Ombri') }}
         </h2>
     </x-slot>
 
@@ -23,10 +23,10 @@
                 <div class="bg-black/20 isolate border border-dark-border p-8 rounded-[32px] shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl max-w-3xl">
                     <h3 class="text-xl font-bold text-white mb-4">{{ __('Storage tizimini sozlash') }}</h3>
                     <div class="text-gray-300 space-y-4 mb-8 text-sm">
-                        <p>{!! __('Fayllarni markazlashgan holda saqlash uchun Telegram Yopiq Guruhini (Private Group) tizimga ulashingiz kerak:') !!}</p>
+                        <p>{!! __('Fayllarni markazlashgan holda saqlash uchun Telegram Yopiq Guruhini tizimga ulashingiz kerak:') !!}</p>
                         <ol class="list-decimal pl-5 space-y-2 text-accent">
-                            <li>{!! __('Telegramda yangi <b>Yopiq guruh (Private Group)</b> yarating.') !!}</li>
-                            <li>{!! __('Tizim botini (<span class="text-white font-mono">:bot</span>) shu guruhga qo\'shing.', ['bot' => '@' . env('TELEGRAM_BOT_USERNAME', 'WipeBitrixBot')]) !!}</li>
+                            <li>{!! __('Telegramda yangi <b>Yopiq guruh</b> yarating.') !!}</li>
+                            <li>{!! __('Tizim botini shu guruhga qo\'shing.', ['bot' => '@' . env('TELEGRAM_BOT_USERNAME', 'WipeBitrixBot')]) !!}</li>
                             <li>{!! __('Botga guruhda <b>Admin</b> huquqlarini bering.') !!}</li>
                             <li>{!! __('Guruhga quyidagi maxsus buyruqni yuboring:') !!}</li>
                         </ol>

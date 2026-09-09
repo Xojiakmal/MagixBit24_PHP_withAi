@@ -16,15 +16,15 @@
         <div class="mb-6 flex items-center space-x-1 bg-white/5 p-1 rounded-xl w-fit border border-dark-border">
             <button wire:click="changeView('planner')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'planner' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
                 <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                {{ __('Rejalashtiruvchi') }} (Planner)
+                {{ __('Rejalashtiruvchi') }}
             </button>
             <button wire:click="changeView('list')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'list' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
                 <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                {{ __('Ro\'yxat') }} (List)
+                {{ __('Ro\'yxat') }}
             </button>
             <button wire:click="changeView('deadline')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'deadline' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
                 <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                {{ __('Muddatlar') }} (Deadline)
+                {{ __('Muddatlar') }}
             </button>
         </div>
         
@@ -32,8 +32,8 @@
         @if($currentView === 'planner')
             <!-- Planner Kanban Board -->
             <div x-data
-                 @wheel="if (Math.abs($event.deltaY) > Math.abs($event.deltaX) && !$event.shiftKey) { $el.scrollLeft += $event.deltaY; $event.preventDefault(); }"
-                 class="flex overflow-x-auto space-x-6 pb-6 custom-scrollbar h-full w-full">
+                 @wheel="if (!$event.target.closest('.overflow-y-auto') && Math.abs($event.deltaY) > Math.abs($event.deltaX) && !$event.shiftKey) { $el.scrollLeft += $event.deltaY; $event.preventDefault(); }"
+                 class="flex overflow-x-auto space-x-6 pb-6 custom-scrollbar w-full" style="height: calc(100vh - 230px);">
                 @foreach($statuses as $statusKey => $statusLabel)
                 <div class="flex-shrink-0 w-[350px] bg-slate-900/40 rounded-3xl border border-dark-border shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-md flex flex-col"
                      x-data
@@ -59,7 +59,7 @@
                         </span>
                     </div>
                     
-                    <div class="p-4 flex-1 space-y-4 overflow-y-auto min-h-[500px]">
+                    <div class="p-4 flex-1 space-y-4 overflow-y-auto min-h-0">
                         @foreach($tasks[$statusKey] ?? [] as $task)
                         <!-- Task Card Component Included via Blade Component or Inline -->
                         <x-task-card :task="$task" />
@@ -72,7 +72,7 @@
         @elseif($currentView === 'deadline')
             <!-- Deadline Kanban Board -->
             <div x-data
-                 @wheel="if (Math.abs($event.deltaY) > Math.abs($event.deltaX) && !$event.shiftKey) { $el.scrollLeft += $event.deltaY; $event.preventDefault(); }"
+                 @wheel="if (!$event.target.closest('.overflow-y-auto') && Math.abs($event.deltaY) > Math.abs($event.deltaX) && !$event.shiftKey) { $el.scrollLeft += $event.deltaY; $event.preventDefault(); }"
                  class="flex overflow-x-auto space-x-6 pb-6 custom-scrollbar h-full w-full">
                 @foreach($deadlineGroups as $groupKey => $groupLabel)
                 <div class="flex-shrink-0 w-[350px] bg-slate-900/40 rounded-3xl border border-dark-border shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-md flex flex-col"
@@ -100,7 +100,7 @@
                         </span>
                     </div>
                     
-                    <div class="p-4 flex-1 space-y-4 overflow-y-auto min-h-[500px]">
+                    <div class="p-4 flex-1 space-y-4 overflow-y-auto min-h-0">
                         @foreach($deadlineTasks[$groupKey] ?? [] as $task)
                             <x-task-card :task="$task" />
                         @endforeach
@@ -116,9 +116,9 @@
                     <table class="w-full text-left text-sm text-gray-300">
                         <thead class="bg-slate-900/60 text-xs uppercase text-gray-400 border-b border-dark-border/50">
                             <tr>
-                                <th scope="col" class="px-6 py-4">{{ __('Nom') }} (Name)</th>
-                                <th scope="col" class="px-6 py-4">{{ __('Muddat') }} (Deadline)</th>
-                                <th scope="col" class="px-6 py-4">{{ __('Mas\'ul') }} (Assignee)</th>
+                                <th scope="col" class="px-6 py-4">{{ __('Nom') }}</th>
+                                <th scope="col" class="px-6 py-4">{{ __('Muddat') }}</th>
+                                <th scope="col" class="px-6 py-4">{{ __('Mas\'ul') }}</th>
                                 <th scope="col" class="px-6 py-4">{{ __('Ustuvorlik') }}</th>
                                 <th scope="col" class="px-6 py-4 text-right">{{ __('Amallar') }}</th>
                             </tr>
@@ -205,7 +205,7 @@
                             <input type="date" wire:model="newTaskStartDate" class="w-full bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Muddat') }} (Due date)</label>
+                            <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Muddat') }}</label>
                             <input type="date" wire:model="newTaskDueDate" class="w-full bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
                         </div>
                     </div>
@@ -214,7 +214,7 @@
                         <h4 class="text-white font-semibold">{{ __('Qo\'shimcha parametrlar') }}</h4>
                         
                         <div>
-                            <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Ustuvorlik') }} (Priority)</label>
+                            <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Ustuvorlik') }}</label>
                             <div class="flex space-x-3">
                                 <label class="flex-1 cursor-pointer">
                                     <input type="radio" wire:model="newTaskPriority" value="low" class="peer sr-only">
@@ -236,7 +236,7 @@
 
                 <!-- Right Pane: Assignment & Observers -->
                 <div class="w-full lg:w-1/3 p-6 bg-black/20 space-y-6">
-                    <h3 class="text-lg font-semibold text-white border-b border-white/10 pb-3">{{ __('Biriktirish') }} (Assignment)</h3>
+                    <h3 class="text-lg font-semibold text-white border-b border-white/10 pb-3">{{ __('Biriktirish') }}</h3>
                     
                     <div class="space-y-4">
                         <div>
@@ -306,8 +306,8 @@
 
                     <div class="pt-6 border-t border-white/10 space-y-4">
                         <div>
-                            <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Kuzatuvchilar') }} (Observers)</label>
-                            @livewire('search-dropdown', ['model' => 'App\Models\User', 'searchFields' => ['name', 'phone', 'address'], 'eventName' => 'observerSelected', 'placeholder' => __('Kuzatuvchi qidirish (Ism, Tel, Manzil)...')])
+                            <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Kuzatuvchilar') }}</label>
+                            @livewire('search-dropdown', ['model' => 'App\Models\User', 'searchFields' => ['name', 'phone', 'address'], 'eventName' => 'observerSelected', 'placeholder' => __('Kuzatuvchi qidirish...')])
                             
                             @if(count($newTaskObservers) > 0)
                                 <div class="mt-3 flex flex-wrap gap-2">
@@ -376,7 +376,7 @@
                 <div>
                     <h3 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
                         <svg class="w-5 h-5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                        <span>{{ __('Biriktirilgan Bitim (Deal)') }}</span>
+                        <span>{{ __('Biriktirilgan Bitim') }}</span>
                     </h3>
                     <a href="{{ route('crm.deals', ['pipelineId' => $selectedTask->deal->pipeline_id, 'highlightDeal' => $selectedTask->deal->id]) }}" class="block bg-white/5 hover:bg-white/10 transition-colors border border-white/10 rounded-xl p-5 group cursor-pointer">
                         <div class="flex justify-between items-start">

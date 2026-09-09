@@ -15,6 +15,7 @@ use Livewire\Attributes\Url;
 class DealKanbanBoard extends Component
 {
     public $pipelineId;
+    public $searchId = '';
     
     #[Url]
     public $highlightDeal = null;
@@ -171,7 +172,7 @@ class DealKanbanBoard extends Component
             $this->pipelineId = $pipeline->id;
             
             // Create default stages
-            $stages = ['Yangi bitim', 'Muzokara', 'Shartnoma', 'Yopilgan'];
+            $stages = ['New deal', 'Negotiation', 'Contract', 'Closed'];
             foreach ($stages as $index => $stageName) {
                 PipelineStage::create([
                     'pipeline_id' => $pipeline->id,
@@ -192,6 +193,11 @@ class DealKanbanBoard extends Component
         }
     }
 
+    public function updatedSearchId()
+    {
+        $this->loadData();
+    }
+
     public function loadData()
     {
         if (!$this->pipelineId) return;
@@ -201,11 +207,16 @@ class DealKanbanBoard extends Component
             ->get();
 
         $query = Deal::with(['contact', 'assignee', 'tasks'])
-            ->whereIn('pipeline_stage_id', $this->stages->pluck('id'));
+            ->whereIn('pipeline_stage_id', $this->stages->pluck('id'))
+            ->latest();
 
         if (!auth()->user()->hasRole('Admin')) {
             // Need a more complex query for JSON overlapping
             // Or just fetch all and filter using the model's hasAccess
+        }
+
+        if ($this->searchId) {
+            $query->where('id', $this->searchId);
         }
 
         $allDeals = $query->get()->filter(function($deal) {

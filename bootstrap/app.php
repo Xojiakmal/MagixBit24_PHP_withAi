@@ -16,7 +16,10 @@ return Application::configure(basePath: dirname(__DIR__))
             \App\Http\Middleware\SetLocale::class,
         ]);
         $middleware->validateCsrfTokens(except: [
+            'telegram/webhook',
             '/telegram/webhook',
+            'telegram/*',
+            '*telegram/webhook',
         ]);
         $middleware->alias([
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,

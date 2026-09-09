@@ -32,7 +32,7 @@
                     @can('manage_contacts')
                     @if($isEditingGroup)
                         <div class="mt-4 space-y-2">
-                            <input type="text" wire:model.defer="groupName" placeholder="{{ __('Guruh nomi (Masalan: Haydovchilar)') }}" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
+                            <input type="text" wire:model.defer="groupName" placeholder="{{ __('Guruh nomi') }}" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white text-sm focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
                             <div class="flex space-x-2">
                                 <button wire:click="saveGroup" class="flex-1 bg-accent hover:bg-accent-hover text-white text-sm py-1.5 rounded-lg transition-colors shadow-[0_0_15px_rgba(155,114,255,0.4)]">{{ __('Saqlash') }}</button>
                                 <button wire:click="$set('isEditingGroup', false)" class="px-3 bg-dark-surface hover:bg-white/10 text-gray-400 rounded-lg border border-dark-border">✕</button>
@@ -132,13 +132,13 @@
                                                     <div @click="selected = 'text'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Text</div>
                                                     <div @click="selected = 'number'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Number</div>
                                                     <div @click="selected = 'date'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Date</div>
-                                                    <div @click="selected = 'select'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Select (Dropdown)</div>
+                                                    <div @click="selected = 'select'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Select</div>
                                                 </div>
                                             </div>
                                         </div>
                                         @if($newFieldType === 'select')
                                             <div class="md:col-span-2">
-                                                <label class="block text-sm font-medium text-gray-400 mb-1">{{ __('Variantlar (vergul bilan ajrating)') }}</label>
+                                                <label class="block text-sm font-medium text-gray-400 mb-1">{{ __('Variantlar') }}</label>
                                                 <input type="text" wire:model="newFieldOptions" placeholder="{{ __('Damas, Cobalt, Gentra, Tracker') }}" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent outline-none transition-all">
                                             </div>
                                         @endif

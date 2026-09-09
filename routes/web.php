@@ -126,17 +126,125 @@ $mainGroup = function () {
                 }
             }
 
-            $inProgressRevenue = \App\Models\Deal::whereHas('stage', function($q) {
-                $q->whereNotIn('name', ['Yopilgan', 'Bekor qilingan']);
-            })->sum('amount');
-            
-            $closedRevenue = \App\Models\Deal::whereHas('stage', function($q) {
-                $q->where('name', 'Yopilgan');
-            })->sum('amount');
-            
-            $newClients = \App\Models\Contact::count();
+            $timeFilter = request('time', 'month');
 
-            return view('dashboard', compact('inProgressRevenue', 'closedRevenue', 'newClients'));
+            $startDate = match($timeFilter) {
+                'day' => now()->startOfDay(),
+                'week' => now()->startOfWeek(),
+                'month' => now()->startOfMonth(),
+                'year' => now()->startOfYear(),
+                default => now()->startOfMonth(),
+            };
+
+            $dealsQuery = \App\Models\Deal::where('created_at', '>=', $startDate);
+
+            $closedRevenue = (clone $dealsQuery)->whereHas('stage', function($q) {
+                $q->where('name', 'Closed');
+            })->sum('amount');
+
+            $inProgressRevenue = (clone $dealsQuery)->whereHas('stage', function($q) {
+                $q->whereNotIn('name', ['Closed', 'Cancelled']);
+            })->sum('amount');
+
+            $inProgressCount = (clone $dealsQuery)->whereHas('stage', function($q) {
+                $q->whereNotIn('name', ['Closed', 'Cancelled']);
+            })->count();
+
+            $totalDeals = (clone $dealsQuery)->count();
+
+            $recentClients = \App\Models\Contact::where('created_at', '>=', $startDate)
+                ->withCount('deals')
+                ->orderBy('created_at', 'desc')
+                ->take(10)
+                ->get();
+
+            // Chart Data Generation (Running balance of In-Progress Deals)
+            $deals = \App\Models\Deal::select('id', 'amount', 'created_at', 'updated_at', 'pipeline_stage_id')
+                         ->with('stage')
+                         ->get();
+
+            $labels = [];
+            $data = [];
+
+            if ($timeFilter === 'day') {
+                for ($i = 0; $i <= 23; $i++) {
+                    $timestamp = now()->startOfDay()->addHours($i)->endOfHour();
+                    $labels[] = sprintf("%02d:00", $i);
+                    
+                    if ($timestamp > now()->endOfHour()) {
+                        $data[] = null;
+                        continue;
+                    }
+                    
+                    $total = 0;
+                    foreach ($deals as $deal) {
+                        if ($deal->created_at <= $timestamp) {
+                            $isClosedOrCancelled = in_array(optional($deal->stage)->name, ['Closed', 'Cancelled']);
+                            if (! ($isClosedOrCancelled && $deal->updated_at <= $timestamp) ) {
+                                $total += $deal->amount;
+                            }
+                        }
+                    }
+                    $data[] = $total;
+                }
+            } elseif ($timeFilter === 'week' || $timeFilter === 'month') {
+                $days = $startDate->diffInDays(now()->endOfMonth()); // To show all labels for the month
+                if ($timeFilter === 'week') $days = 6;
+                
+                for ($i = 0; $i <= $days; $i++) {
+                    $dateObj = $startDate->copy()->addDays($i);
+                    $timestamp = $dateObj->copy()->endOfDay();
+                    $labels[] = $dateObj->format('d-M');
+                    
+                    if ($timestamp > now()->endOfDay()) {
+                        $data[] = null;
+                        continue;
+                    }
+
+                    $total = 0;
+                    foreach ($deals as $deal) {
+                        if ($deal->created_at <= $timestamp) {
+                            $isClosedOrCancelled = in_array(optional($deal->stage)->name, ['Closed', 'Cancelled']);
+                            if (! ($isClosedOrCancelled && $deal->updated_at <= $timestamp) ) {
+                                $total += $deal->amount;
+                            }
+                        }
+                    }
+                    $data[] = $total;
+                }
+            } elseif ($timeFilter === 'year') {
+                for ($i = 1; $i <= 12; $i++) {
+                    $dateObj = \Carbon\Carbon::create(null, $i, 1);
+                    $timestamp = $dateObj->copy()->endOfMonth();
+                    $labels[] = $dateObj->format('M');
+                    
+                    if ($dateObj->startOfMonth() > now()->startOfMonth()) {
+                        $data[] = null;
+                        continue;
+                    }
+
+                    $total = 0;
+                    foreach ($deals as $deal) {
+                        if ($deal->created_at <= $timestamp) {
+                            $isClosedOrCancelled = in_array(optional($deal->stage)->name, ['Closed', 'Cancelled']);
+                            if (! ($isClosedOrCancelled && $deal->updated_at <= $timestamp) ) {
+                                $total += $deal->amount;
+                            }
+                        }
+                    }
+                    $data[] = $total;
+                }
+            }
+
+            $chartData = [
+                'labels' => $labels,
+                'data' => $data,
+            ];
+
+            return view('dashboard', compact(
+                'timeFilter', 'closedRevenue', 'inProgressRevenue', 
+                'inProgressCount', 'totalDeals', 'recentClients', 'chartData'
+            ));
         })->name('dashboard');
 
         Route::get('/profile', App\Livewire\ProfileSettings::class)->name('profile');

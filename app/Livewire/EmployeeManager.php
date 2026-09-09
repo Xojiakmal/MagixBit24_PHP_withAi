@@ -305,10 +305,10 @@ class EmployeeManager extends Component
             $query->where('team_id', Auth::user()->managerOf->id);
         }
 
-        $users = $query->get();
+        $users = $query->latest()->get();
         
         $roles = Role::whereNotIn('name', ['Admin', 'Xodim'])->get();
-        $teams = \App\Models\Team::where('tenant_id', $this->tenant->id)->with('users', 'manager')->get();
+        $teams = \App\Models\Team::where('tenant_id', $this->tenant->id)->with('users', 'manager')->latest()->get();
 
         return view('livewire.employee-manager', compact('users', 'roles', 'teams'))
             ->layout('layouts.app');

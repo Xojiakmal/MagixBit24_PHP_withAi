@@ -13,7 +13,7 @@
             {{ __('Xodimlar') }}
         </button>
         <button wire:click="switchTab('teams')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $activeTab === 'teams' ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
-            {{ __('Guruhlar (Teams)') }}
+            {{ __('Guruhlar') }}
         </button>
         @if(Auth::user()->hasRole('Admin') || Auth::user()->can('manage_employees'))
         <button wire:click="switchTab('roles')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $activeTab === 'roles' ? 'bg-white/10 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)]' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
@@ -91,7 +91,7 @@
                                     {{ $team->name }}
                                 </h3>
                                 <p class="text-sm text-dark-muted mt-1">
-                                    {{ __('Menejer:') }} <strong>{{ $team->manager ? $team->manager->name : __('Admin (Avtomatik)') }}</strong>
+                                    {{ __('Menejer:') }} <strong>{{ $team->manager ? $team->manager->name : __('Admin') }}</strong>
                                 </p>
                             </div>
                             @if(Auth::user()->hasRole('Admin') || Auth::user()->can('manage_employees'))
@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="bg-black/30 rounded-2xl p-4 border border-dark-border">
-                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">{{ __('Guruh a\'zolari') }} ({{ $team->users->count() }})</h4>
+                            <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3">{{ __('Guruh a\'zolari') }} }})</h4>
                             <div class="flex flex-wrap gap-2">
                                 @forelse($team->users as $member)
                                     <span class="inline-flex items-center px-3 py-1 rounded-lg text-xs font-medium bg-accent/10 text-accent border border-accent/20">

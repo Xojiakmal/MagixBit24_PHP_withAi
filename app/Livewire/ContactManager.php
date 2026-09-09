@@ -180,7 +180,7 @@ class ContactManager extends Component
         if ($this->activeGroupId) {
             $activeGroup = ContactGroup::find($this->activeGroupId);
             $customFields = CustomField::where('contact_group_id', $this->activeGroupId)->get();
-            $contacts = Contact::where('contact_group_id', $this->activeGroupId)->get();
+            $contacts = Contact::where('contact_group_id', $this->activeGroupId)->latest()->get();
         }
 
         return view('livewire.contact-manager', compact('groups', 'activeGroup', 'customFields', 'contacts'))

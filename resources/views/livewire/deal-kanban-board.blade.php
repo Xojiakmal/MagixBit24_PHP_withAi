@@ -14,28 +14,38 @@
             @endcan
         </div>
 
-        <!-- View Tabs -->
-        <div class="mb-6 flex items-center space-x-1 bg-white/5 p-1 rounded-xl w-fit border border-dark-border">
-            <button wire:click="setView('kanban')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'kanban' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
-                <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
-                {{ __('Kanban') }}
-            </button>
-            <button wire:click="setView('list')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'list' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
-                <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
-                {{ __('Ro\'yxat') }} (List)
-            </button>
-            <button wire:click="setView('activities')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'activities' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
-                <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                {{ __('Faoliyatlar') }} (Activities)
-            </button>
+        <!-- View Tabs and Search -->
+        <div class="mb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div class="flex items-center space-x-1 bg-white/5 p-1 rounded-xl w-fit border border-dark-border">
+                <button wire:click="setView('kanban')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'kanban' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                    <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                    {{ __('Kanban') }}
+                </button>
+                <button wire:click="setView('list')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'list' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                    <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path></svg>
+                    {{ __('Ro\'yxat') }}
+                </button>
+                <button wire:click="setView('activities')" class="px-4 py-2 rounded-lg text-sm font-medium transition-colors {{ $currentView === 'activities' ? 'bg-white/10 text-white' : 'text-gray-400 hover:text-white hover:bg-white/5' }}">
+                    <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    {{ __('Faoliyatlar') }}
+                </button>
+            </div>
+
+            <!-- Search input -->
+            <div class="relative w-full md:w-64">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </div>
+                <input wire:model.live.debounce.300ms="searchId" type="text" placeholder="{{ __('ID bo\'yicha qidirish...') }}" class="w-full pl-10 pr-4 py-2 bg-white/5 border border-dark-border rounded-xl text-sm text-white placeholder-gray-400 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-colors" />
+            </div>
         </div>
         
         <!-- View Content -->
         @if($currentView === 'kanban')
         <!-- Kanban Board -->
             <div x-data
-                 @wheel="if (Math.abs($event.deltaY) > Math.abs($event.deltaX) && !$event.shiftKey) { $el.scrollLeft += $event.deltaY; $event.preventDefault(); }"
-                 class="flex overflow-x-auto space-x-6 pb-6 custom-scrollbar h-full w-full">
+                 @wheel="if (!$event.target.closest('.overflow-y-auto') && Math.abs($event.deltaY) > Math.abs($event.deltaX) && !$event.shiftKey) { $el.scrollLeft += $event.deltaY; $event.preventDefault(); }"
+                 class="flex overflow-x-auto space-x-6 pb-6 custom-scrollbar w-full" style="height: calc(100vh - 230px);">
             @foreach($stages as $stage)
             <div class="flex-shrink-0 w-[350px] bg-slate-900/40 rounded-3xl border border-dark-border shadow-[0_8px_32px_rgba(0,0,0,0.3)] backdrop-blur-md flex flex-col"
                  x-data
@@ -55,7 +65,7 @@
                     </span>
                 </div>
                 
-                <div class="p-4 flex-1 space-y-4 overflow-y-auto min-h-[500px]">
+                <div class="p-4 flex-1 space-y-4 overflow-y-auto min-h-0">
                     @foreach($deals[$stage->id] ?? [] as $deal)
                     <div class="bg-slate-800/60 backdrop-blur-md p-5 rounded-2xl shadow-sm border cursor-pointer transition-all duration-300 group relative overflow-hidden {{ $highlightDeal == $deal->id ? 'border-accent shadow-[0_0_20px_rgba(155,114,255,0.5)] ring-2 ring-accent' : 'border-dark-border hover:border-accent hover:shadow-[0_0_15px_rgba(155,114,255,0.2)]' }}"
                          draggable="true"
@@ -169,7 +179,7 @@
         @elseif($currentView === 'activities')
         <!-- Activities View -->
             <div x-data
-                 @wheel="if (Math.abs($event.deltaY) > Math.abs($event.deltaX) && !$event.shiftKey) { $el.scrollLeft += $event.deltaY; $event.preventDefault(); }"
+                 @wheel="if (!$event.target.closest('.overflow-y-auto') && Math.abs($event.deltaY) > Math.abs($event.deltaX) && !$event.shiftKey) { $el.scrollLeft += $event.deltaY; $event.preventDefault(); }"
                  class="flex overflow-x-auto space-x-6 pb-6 custom-scrollbar h-full w-full">
             @php
                 $columns = [
@@ -229,7 +239,7 @@
         @endif
 
         <!-- Create Deal Slide-Over -->
-        <x-slide-over wire:model="isCreatingDeal" id="createDealPanel" :title="__('Yangi bitim (Deal) qo\'shish')" maxWidth="6xl">
+        <x-slide-over wire:model="isCreatingDeal" id="createDealPanel" :title="__('Yangi bitim qo\'shish')" maxWidth="6xl">
             <x-slot:actions>
                 <button wire:click="saveDeal" class="px-5 py-2 bg-accent hover:bg-accent-hover text-white text-sm font-semibold rounded-lg transition-colors shadow-[0_0_15px_rgba(155,114,255,0.4)]">
                     {{ __('Saqlash') }}
@@ -249,7 +259,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Summasi va Valyuta (Amount and currency)') }}</label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Summasi va Valyuta') }}</label>
                             <div class="flex space-x-2 relative">
                                 <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
                                 <input type="tel" wire:model="newDealAmount" placeholder="0.00" class="w-full bg-white/5 border border-dark-border rounded-xl pl-8 pr-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all text-lg font-medium">
@@ -259,13 +269,13 @@
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-5 bg-white/5 rounded-2xl border border-white/5">
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Mijoz (Client)') }} *</label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Mijoz') }} *</label>
                             <input type="text" wire:model="newDealClientName" placeholder="{{ __('Mijoz ismi') }}" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all">
                             @error('newDealClientName') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Telefon raqam (Phone)') }} *</label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Telefon raqam') }} *</label>
                             <input type="tel" wire:model="newDealClientPhone" oninput="this.value = this.value.replace(/[^0-9\+\s]/g, '')" placeholder="+998 90 123 45 67" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all">
                             @error('newDealClientPhone') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
@@ -285,7 +295,7 @@
 
                     <div class="p-5 bg-white/5 rounded-2xl border border-white/5 space-y-4">
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ Auth::user()->hasRole('Admin') ? __('Mas\'ullar (Xodimlar, Rollar, Jamoalar)') : __('Mas\'ul xodim') }}</label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ Auth::user()->hasRole('Admin') ? __('Mas\'ullar') : __('Mas\'ul xodim') }}</label>
                             
                             <div class="grid grid-cols-1 {{ Auth::user()->hasRole('Admin') ? 'md:grid-cols-3' : '' }} gap-4">
                                 <div class="bg-black/20 border border-dark-border rounded-xl p-3 max-h-48 overflow-y-auto custom-scrollbar">
@@ -325,7 +335,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <!-- Custom Select for Deal Type -->
                             <div x-data="{ open: false, selected: @entangle('newDealType').defer }" class="relative">
-                                <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Bitim turi') }} (Deal Type)</label>
+                                <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Bitim turi') }}</label>
                                 <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
                                     <span x-text="selected === 'regular' ? '{{ __('Oddiy savdo') }}' : (selected === 'service' ? '{{ __('Xizmat ko\'rsatish') }}' : (selected === 'complex' ? '{{ __('Kompleks sotuv') }}' : (selected === 'delivery' ? '{{ __('Yetkazib berish') }}' : '{{ __('Tanlang') }}')))"></span>
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -340,14 +350,14 @@
                             
                             <!-- Custom Select for Source -->
                             <div x-data="{ open: false, selected: @entangle('newDealSource').defer }" class="relative">
-                                <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Manba') }} (Source)</label>
+                                <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Manba') }}</label>
                                 <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-black/20 border border-dark-border rounded-lg px-3 py-2 text-white text-sm focus:border-accent outline-none">
                                     <span x-text="
                                         selected === 'telegram' ? 'Telegram' : 
                                         (selected === 'call' ? '{{ __('Qo\'ng\'iroq') }}' : 
                                         (selected === 'email' ? 'Email' : 
                                         (selected === 'website' ? '{{ __('Veb-sayt') }}' : 
-                                        (selected === 'admin' ? '{{ __('Admin (Kompaniya egasi)') }}' : 
+                                        (selected === 'admin' ? '{{ __('Admin') }}' : 
                                         (selected === 'other' ? '{{ __('Boshqa') }}' : '{{ __('Tanlang') }}')))))
                                     "></span>
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
@@ -357,14 +367,14 @@
                                     <div @click="selected = 'call'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Qo\'ng\'iroq') }}</div>
                                     <div @click="selected = 'email'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">Email</div>
                                     <div @click="selected = 'website'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Veb-sayt') }}</div>
-                                    <div @click="selected = 'admin'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Admin (Kompaniya egasi)') }}</div>
+                                    <div @click="selected = 'admin'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Admin') }}</div>
                                     <div @click="selected = 'other'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Boshqa') }}</div>
                                 </div>
                             </div>
                         </div>
 
                         <div>
-                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Tafsilotlar (Description)') }}</label>
+                            <label class="block text-sm font-semibold text-white/80 mb-2">{{ __('Tafsilotlar') }}</label>
                             <textarea wire:model="newDealDescription" rows="4" placeholder="{{ __('Bitim tafsilotlari...') }}" class="w-full bg-white/5 border border-dark-border rounded-xl px-4 py-3 text-white focus:ring-2 focus:ring-accent focus:border-accent transition-all custom-scrollbar"></textarea>
                         </div>
                         
@@ -373,7 +383,7 @@
 
                 <!-- Right Pane: Products -->
                 <div class="w-full lg:w-1/3 p-6 bg-black/20 space-y-6">
-                    <h3 class="text-lg font-semibold text-white border-b border-white/10 pb-3">{{ __('Mahsulotlar') }} (Products)</h3>
+                    <h3 class="text-lg font-semibold text-white border-b border-white/10 pb-3">{{ __('Mahsulotlar') }}</h3>
                     
                     <div class="flex space-x-2 border-b border-dark-border mb-4">
                         <button wire:click="$set('productTab', 'select')" class="pb-2 text-sm font-medium transition-colors border-b-2 {{ $productTab === 'select' ? 'text-accent border-accent' : 'text-gray-500 border-transparent hover:text-gray-300' }}">{{ __('Tanlash') }}</button>
@@ -382,7 +392,7 @@
 
                     @if($productTab === 'select')
                         <div class="space-y-2 max-h-64 overflow-y-auto custom-scrollbar pr-2">
-                            <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Barcha mahsulotlar') }} (All Products)</label>
+                            <label class="block text-sm font-medium text-white/60 mb-2">{{ __('Barcha mahsulotlar') }}</label>
                             @forelse($this->allProducts as $product)
                                 <div class="flex justify-between items-center p-3 bg-white/5 border border-dark-border rounded-lg hover:border-accent/50 transition-colors group">
                                     <div class="flex-1 cursor-pointer" wire:click="addProductFromList({{ $product->id }})" title="{{ __('Bitimga qo\'shish') }}">
@@ -516,7 +526,7 @@
 
             <!-- Assignments Section -->
             <div>
-                <h3 class="text-lg font-bold text-white mb-4">{{ __('Mas\'ullar (Biriktirilganlar)') }}</h3>
+                <h3 class="text-lg font-bold text-white mb-4">{{ __('Mas\'ullar') }}</h3>
                 
                 @if(auth()->user()->hasRole('Admin') || auth()->user()->can('assign_deal') || auth()->user()->managerOf)
                     <!-- Multi-assignment Form Component pattern -->
@@ -585,7 +595,7 @@
                             <p class="text-white mt-1 capitalize">{{ __($selectedDeal->deal_type) }}</p>
                         </div>
                         <div>
-                            <span class="text-xs text-dark-muted uppercase font-bold">{{ __('Manba (Source)') }}</span>
+                            <span class="text-xs text-dark-muted uppercase font-bold">{{ __('Manba') }}</span>
                             <p class="text-white mt-1 capitalize">{{ __($selectedDeal->source) }}</p>
                         </div>
                         <div>
@@ -596,7 +606,7 @@
                 </div>
 
                 <div>
-                    <h3 class="text-lg font-bold text-white mb-4">{{ __('Mahsulotlar') }} (Products)</h3>
+                    <h3 class="text-lg font-bold text-white mb-4">{{ __('Mahsulotlar') }}</h3>
                     @if($selectedDeal->products->count() > 0)
                         <div class="bg-black/20 border border-dark-border rounded-xl overflow-hidden">
                             <table class="w-full text-left text-sm text-gray-300">
@@ -637,35 +647,35 @@
             @if($hasTaskAccess)
             <div class="pt-6 border-t border-white/5 mt-8">
                 <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-bold text-white">{{ __('Tezkor Vazifa (Task) Qo\'shish') }}</h3>
+                    <h3 class="text-lg font-bold text-white">{{ __('Tezkor Vazifa Qo\'shish') }}</h3>
                     <span class="text-xs text-gray-400">{{ __('Joriy bitimga avtomatik biriktiriladi') }}</span>
                 </div>
                 
                 <div class="bg-black/20 border border-dark-border rounded-xl p-5 space-y-4">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <input type="text" wire:model="quickTaskTitle" placeholder="{{ __('Vazifa nomi (Majburiy)') }}" class="w-full bg-black/40 border border-dark-border rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent outline-none focus:ring-1 focus:ring-accent transition-all">
+                            <input type="text" wire:model="quickTaskTitle" placeholder="{{ __('Vazifa nomi') }}" class="w-full bg-black/40 border border-dark-border rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent outline-none focus:ring-1 focus:ring-accent transition-all">
                             @error('quickTaskTitle') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
                         </div>
                         <div class="flex space-x-3">
-                            <input type="date" wire:model="quickTaskDueDate" class="w-full bg-black/40 border border-dark-border rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent outline-none focus:ring-1 focus:ring-accent transition-all" title="{{ __('Muddat (ixtiyoriy)') }}">
+                            <input type="date" wire:model="quickTaskDueDate" class="w-full bg-black/40 border border-dark-border rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent outline-none focus:ring-1 focus:ring-accent transition-all" title="{{ __('Muddat') }}">
                             <!-- Custom Select for Priority -->
                             <div x-data="{ open: false, selected: @entangle('quickTaskPriority').defer }" class="relative w-full">
                                 <button type="button" @click="open = !open" @click.away="open = false" class="w-full flex justify-between items-center bg-black/40 border border-dark-border rounded-lg px-4 py-2.5 text-white text-sm focus:border-accent outline-none transition-all">
-                                    <span x-text="selected === 'low' ? '{{ __('Past (Low)') }}' : (selected === 'medium' ? '{{ __('O\'rta (Medium)') }}' : (selected === 'high' ? '{{ __('Yuqori (High)') }}' : '{{ __('Tanlang') }}'))"></span>
+                                    <span x-text="selected === 'low' ? '{{ __('Past') }}' : (selected === 'medium' ? '{{ __('O\'rta') }}' : (selected === 'high' ? '{{ __('Yuqori') }}' : '{{ __('Tanlang') }}'))"></span>
                                     <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
                                 </button>
                                 <div x-show="open" x-transition class="absolute z-[100] w-full mt-1 bg-slate-900 border border-dark-border rounded-lg shadow-xl overflow-hidden max-h-48 overflow-y-auto custom-scrollbar" style="display: none;">
-                                    <div @click="selected = 'low'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Past (Low)') }}</div>
-                                    <div @click="selected = 'medium'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('O\'rta (Medium)') }}</div>
-                                    <div @click="selected = 'high'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Yuqori (High)') }}</div>
+                                    <div @click="selected = 'low'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Past') }}</div>
+                                    <div @click="selected = 'medium'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('O\'rta') }}</div>
+                                    <div @click="selected = 'high'; open = false" class="px-4 py-2 text-sm text-gray-300 hover:bg-accent/20 hover:text-white cursor-pointer transition-colors">{{ __('Yuqori') }}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
                     <div>
-                        <textarea wire:model="quickTaskDescription" rows="2" placeholder="{{ __('Batafsil ma\'lumot (ixtiyoriy)...') }}" class="w-full bg-black/40 border border-dark-border rounded-lg px-4 py-2 text-white text-sm focus:border-accent outline-none focus:ring-1 focus:ring-accent transition-all custom-scrollbar"></textarea>
+                        <textarea wire:model="quickTaskDescription" rows="2" placeholder="{{ __('Batafsil ma\'lumot...') }}" class="w-full bg-black/40 border border-dark-border rounded-lg px-4 py-2 text-white text-sm focus:border-accent outline-none focus:ring-1 focus:ring-accent transition-all custom-scrollbar"></textarea>
                     </div>
 
                     <div class="flex justify-end pt-2">
@@ -678,7 +688,7 @@
 
                 @if($selectedDeal->tasks->count() > 0)
                 <div class="mt-4">
-                    <h4 class="text-sm font-bold text-gray-300 mb-2">{{ __('Biriktirilgan Vazifalar') }} ({{ $selectedDeal->tasks->count() }})</h4>
+                    <h4 class="text-sm font-bold text-gray-300 mb-2">{{ __('Biriktirilgan Vazifalar') }} }})</h4>
                     <div class="space-y-2 max-h-48 overflow-y-auto custom-scrollbar">
                         @foreach($selectedDeal->tasks->sortByDesc('created_at') as $task)
                         <div class="bg-white/5 border border-white/5 rounded-lg p-3 flex justify-between items-center">

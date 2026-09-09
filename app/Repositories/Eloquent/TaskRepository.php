@@ -38,6 +38,6 @@ class TaskRepository implements TaskRepositoryInterface
 
     public function getAllTasks()
     {
-        return Task::all();
+        return Task::latest()->get();
     }
 }
