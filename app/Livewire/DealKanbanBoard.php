@@ -172,7 +172,7 @@ class DealKanbanBoard extends Component
             $this->pipelineId = $pipeline->id;
             
             // Create default stages
-            $stages = ['New deal', 'Negotiation', 'Contract', 'Closed'];
+            $stages = ['New deal', 'Negotiation', 'Contract', 'Closed', 'Cancelled'];
             foreach ($stages as $index => $stageName) {
                 PipelineStage::create([
                     'pipeline_id' => $pipeline->id,

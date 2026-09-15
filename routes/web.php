@@ -254,6 +254,8 @@ $mainGroup = function () {
         Route::get('/crm/deals', App\Livewire\DealKanbanBoard::class)->name('crm.deals')->middleware('can:view_crm');
         Route::get('/projects/tasks', App\Livewire\TaskKanbanBoard::class)->name('projects.tasks')->middleware('can:view_tasks');
         
+        Route::get('/company/settings', \App\Livewire\CompanySettings::class)->name('company.settings');
+        
         Route::get('/storage', \App\Livewire\StorageManager::class)->name('storage.index')->middleware('can:view_storage');
         Route::post('/storage/settings', [App\Http\Controllers\StorageController::class, 'saveSettings'])->name('storage.settings')->middleware('can:view_storage');
         Route::post('/storage/upload', [App\Http\Controllers\StorageController::class, 'upload'])->name('storage.upload')->middleware('can:view_storage');

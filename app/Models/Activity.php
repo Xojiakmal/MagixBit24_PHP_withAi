@@ -32,12 +32,23 @@ class Activity extends Model
     protected static function booted()
     {
         static::created(function ($activity) {
-            $count = self::where('tenant_id', $activity->tenant_id)->count();
-            if ($count >= 1000) {
-                dispatch(function () use ($activity) {
-                    \App\Services\ActivityArchiver::archive($activity->tenant_id);
-                })->afterResponse();
-            }
+            dispatch(function () use ($activity) {
+                $tenant = \App\Models\Tenant::find($activity->tenant_id);
+                if (!$tenant) return;
+                
+                $limit = $tenant->activity_log_limit ?? 500;
+                $count = self::where('tenant_id', $activity->tenant_id)->count();
+                
+                if ($count > $limit) {
+                    $excess = $count - $limit;
+                    $idsToDelete = self::where('tenant_id', $activity->tenant_id)
+                        ->orderBy('id', 'asc')
+                        ->limit($excess)
+                        ->pluck('id');
+                    
+                    self::whereIn('id', $idsToDelete)->delete();
+                }
+            })->afterResponse();
         });
     }
 }

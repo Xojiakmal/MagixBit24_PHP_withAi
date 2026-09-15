@@ -10,20 +10,9 @@
             $tenant = \App\Models\Tenant::find(auth()->user()->current_tenant_id);
         @endphp
 
-        @if($tenant && $tenant->owner_id === auth()->id())
-            <div class="mb-8 p-6 bg-accent/10 border border-accent/20 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
-                <div>
-                    <h3 class="text-lg font-bold text-white flex items-center">
-                        <svg class="w-5 h-5 mr-2 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
-                        {{ __('Kompaniyaga qo\'shilish kodi') }}
-                    </h3>
-                    <p class="text-sm text-accent/80 mt-1">{{ __('Ushbu kodni yangi xodimlarga bering. Ular "Kompaniyaga qo\'shilish" oynasida ushbu kodni kiritishlari kerak.') }}</p>
-                </div>
-                <div class="flex items-center space-x-3 bg-black/40 px-5 py-3 rounded-xl border border-dark-border">
-                    <code class="text-accent font-mono text-xl font-bold select-all tracking-wider">{{ $tenant->unique_link }}</code>
-                </div>
-            </div>
-        @endif
+        @php
+            $tenant = \App\Models\Tenant::find(auth()->user()->current_tenant_id);
+        @endphp
 
         @php
             $hasAnyAccess = auth()->user()->hasRole('Admin') || auth()->user()->can('view_dashboard');

@@ -15,11 +15,11 @@ class CRMSeeder extends Seeder
         $pipeline = \App\Models\Pipeline::create(['name' => 'Umumiy Sotuv']);
         
         \App\Models\PipelineStage::insert([
-            ['pipeline_id' => $pipeline->id, 'name' => 'Yangi', 'order' => 1],
-            ['pipeline_id' => $pipeline->id, 'name' => 'Muzokara', 'order' => 2],
-            ['pipeline_id' => $pipeline->id, 'name' => 'Shartnoma', 'order' => 3],
-            ['pipeline_id' => $pipeline->id, 'name' => 'Muvaffaqiyatli', 'order' => 4],
-            ['pipeline_id' => $pipeline->id, 'name' => 'Bekor qilingan', 'order' => 5],
+            ['pipeline_id' => $pipeline->id, 'name' => 'New deal', 'order' => 1],
+            ['pipeline_id' => $pipeline->id, 'name' => 'Negotiation', 'order' => 2],
+            ['pipeline_id' => $pipeline->id, 'name' => 'Contract', 'order' => 3],
+            ['pipeline_id' => $pipeline->id, 'name' => 'Closed', 'order' => 4],
+            ['pipeline_id' => $pipeline->id, 'name' => 'Cancelled', 'order' => 5],
         ]);
     }
 }
